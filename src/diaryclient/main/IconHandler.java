@@ -21,7 +21,7 @@ public class IconHandler {
 		return _instance;
 	}
 	
-	public void Clear() 
+	public void clear() 
 	{
 		_sb.setLength(0);
 		_start = 0;
@@ -53,7 +53,7 @@ public class IconHandler {
 		boolean result = false;
 		
 		if ('/' == c) {
-			Clear();
+			clear();
 			_sb.append('/');
 			_start = index;
 			_offset ++;
@@ -62,7 +62,7 @@ public class IconHandler {
 				_sb.append('w');
 				_offset ++;
 			} else {
-				Clear();
+				clear();
 			}
 			
 		} else if ('0' <= c && c <= '9') {
@@ -73,8 +73,10 @@ public class IconHandler {
 				_offset ++;
 				_index = c-'0';
 			} else {
-				Clear();
+				clear();
 			}
+		} else {
+			clear();
 		}
 		
 		return result;
