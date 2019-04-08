@@ -1,5 +1,10 @@
 package diaryclient.main;
 
+/**
+ *
+ * @author cs
+ *
+ */
 public class IconHandler {
 	private static IconHandler _instance = null;
 	
