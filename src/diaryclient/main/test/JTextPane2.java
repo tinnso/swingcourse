@@ -1,3 +1,5 @@
+package diaryclient.main.test;
+
 import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -12,6 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyleConstants;
+
+
 
 public class JTextPane2 extends JFrame {
 	private JTextPane mypane;
