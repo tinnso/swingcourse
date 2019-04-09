@@ -1,7 +1,10 @@
 package com.diaryclient.usermgr;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,7 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
+import com.mysql.cj.xdevapi.Statement;
 
 public class UserProfileFrame extends JFrame {
 
@@ -83,6 +88,16 @@ public class UserProfileFrame extends JFrame {
         if (ismodify) text = "ÐÞ¸Ä";
         JButton bu3 = new JButton(text);
         bu3.setBounds(100, 250, 65, 20);
+        
+        bu3.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+
+		});
+        
         this.add(bu3);
 	}
 }
