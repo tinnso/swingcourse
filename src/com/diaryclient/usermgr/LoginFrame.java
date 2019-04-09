@@ -9,11 +9,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
 
 import java.sql.*;
@@ -69,6 +71,67 @@ public class LoginFrame extends JFrame {
 		JButton bu1 = new JButton("µÇÂ¼");
 		bu1.setBounds(250, 150, 65, 20);
 		normalpanel.add(bu1);
+		
+		bu1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					bu1.setEnabled(false);
+					
+					String user = username.getText();
+					String pass = String.valueOf(password.getPassword());
+		
+					
+					if( "".equals(user)) {
+						JOptionPane.showMessageDialog(LoginFrame.this, "You must input the account!");
+						return;
+					}
+					
+					
+					Connection conn = DBManager.getconn();
+					java.sql.Statement statement = conn.createStatement();
+					
+					String sql = String.format("select count(*) from duser where account='%s' and password='%s' and type=1",user, pass);
+					
+					ResultSet rs = statement.executeQuery(sql);
+					int count = 0;
+					
+					while(rs.next()) {
+						
+						count = rs.getInt(1);
+					}
+					
+					rs.close();
+					
+					if (count == 0) {
+						JOptionPane.showMessageDialog(LoginFrame.this, "Account or Password not correct");
+						return;
+					} else {
+						
+						// TODO
+					}
+					
+					conn.close();
+									
+					
+				} catch (SQLException e1) {
+					System.out.println("sql error happend!!!");
+					e1.printStackTrace();
+				} catch (Exception e2) {
+					System.out.println("some other error happend!!!");
+					e2.printStackTrace();
+				} finally {
+					bu1.setEnabled(true);
+				}
+				
+			}
+				
+
+
+		});
+		
 
 		tabbedPane.addTab("Normal Login", normalpanel);
 
@@ -100,6 +163,65 @@ public class LoginFrame extends JFrame {
 		JButton bu2 = new JButton("µÇÂ¼");
 		bu2.setBounds(250, 150, 65, 20);
 		adminpanel.add(bu2);
+		
+		bu2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					bu2.setEnabled(false);
+					
+					String user = adminname.getText();
+					String pass = String.valueOf(adminpassword.getPassword());
+		
+					
+					if( "".equals(user)) {
+						JOptionPane.showMessageDialog(LoginFrame.this, "You must input the account!");
+						return;
+					}
+					
+					
+					Connection conn = DBManager.getconn();
+					java.sql.Statement statement = conn.createStatement();
+					
+					String sql = String.format("select count(*) from duser where account='%s' and password='%s' and type=0",user, pass);
+					
+					ResultSet rs = statement.executeQuery(sql);
+					int count = 0;
+					
+					while(rs.next()) {
+						
+						count = rs.getInt(1);
+					}
+					
+					rs.close();
+					
+					if (count == 0) {
+						JOptionPane.showMessageDialog(LoginFrame.this, "Account or Password not correct");
+						return;
+					} else {
+						// TODO
+					}
+					
+					conn.close();
+									
+					
+				} catch (SQLException e1) {
+					System.out.println("sql error happend!!!");
+					e1.printStackTrace();
+				} catch (Exception e2) {
+					System.out.println("some other error happend!!!");
+					e2.printStackTrace();
+				} finally {
+					bu2.setEnabled(true);
+				}
+				
+			}
+				
+
+
+		});
 
 		tabbedPane.addTab("Admin Login", adminpanel);
 

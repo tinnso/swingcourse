@@ -39,10 +39,12 @@ public class DBManager {
         
         //遍历查询结果集
         try {
+        	
+        	_url = "jdbc:mysql://localhost:3306/diary?user=root&password=123456&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
 			con = DriverManager.getConnection(_url);
 			
 			if(!con.isClosed()) {
-			    System.out.println("Succeeded connecting to the Database!");
+			    System.out.println("connection successfully returned!");
 			    return con;
 			} else {
 				return null;
