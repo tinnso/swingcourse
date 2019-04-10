@@ -1,4 +1,4 @@
-package diaryclient.main;
+package com.diaryclient.main;
 
 /**
  *

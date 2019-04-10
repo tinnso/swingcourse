@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 public  class StaticDataManager {
 
 	public static JFrame LoginFrame = null;
-	public static String User = null;
+	public static String user = null;
 	
 	public static Stack<Component> st = new Stack<Component>();
 	
@@ -23,4 +23,14 @@ public  class StaticDataManager {
 			st.push(com);
 			com.setVisible(false);
 	} 
+	
+	public static void setUserInfo(String info) {
+		user = info;
+	}
+	
+	public static String getUserFolder(){
+		
+		return "cs";
+		//return user;
+	}
 }

@@ -109,8 +109,10 @@ public class LoginFrame extends JFrame {
 						JOptionPane.showMessageDialog(LoginFrame.this, "Account or Password not correct");
 						return;
 					} else {
-						
+	
 						// TODO
+						StaticDataManager.setUserInfo(user);
+					
 					}
 					
 					conn.close();
@@ -201,6 +203,7 @@ public class LoginFrame extends JFrame {
 						JOptionPane.showMessageDialog(LoginFrame.this, "Account or Password not correct");
 						return;
 					} else {
+						StaticDataManager.setUserInfo(user);
 						// TODO
 					}
 					

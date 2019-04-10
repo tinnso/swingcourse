@@ -1,4 +1,4 @@
-package diaryclient.main;
+package com.diaryclient.main;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -42,6 +42,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
@@ -56,6 +57,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 	}
+	*/
 
 	/**
 	 * Create the frame.
