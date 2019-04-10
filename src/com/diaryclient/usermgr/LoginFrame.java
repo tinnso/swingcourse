@@ -93,14 +93,15 @@ public class LoginFrame extends JFrame {
 					Connection conn = DBManager.getconn();
 					java.sql.Statement statement = conn.createStatement();
 					
-					String sql = String.format("select count(*) from duser where account='%s' and password='%s' and type=1",user, pass);
+					String sql = String.format("select id, account from duser where account='%s' and password='%s' and type=1",user, pass);
 					
 					ResultSet rs = statement.executeQuery(sql);
 					int count = 0;
 					
+					int userid = 0;
 					while(rs.next()) {
 						
-						count = rs.getInt(1);
+						userid = rs.getInt(1);
 					}
 					
 					rs.close();
@@ -111,7 +112,7 @@ public class LoginFrame extends JFrame {
 					} else {
 	
 						// TODO
-						StaticDataManager.setUserInfo(user);
+						StaticDataManager.setUserInfo(user, userid);
 					
 					}
 					
@@ -187,14 +188,15 @@ public class LoginFrame extends JFrame {
 					Connection conn = DBManager.getconn();
 					java.sql.Statement statement = conn.createStatement();
 					
-					String sql = String.format("select count(*) from duser where account='%s' and password='%s' and type=0",user, pass);
+					String sql = String.format("select id, account from duser where account='%s' and password='%s' and type=0",user, pass);
 					
 					ResultSet rs = statement.executeQuery(sql);
 					int count = 0;
 					
+					int userid = 0;
 					while(rs.next()) {
-						
-						count = rs.getInt(1);
+						count ++;
+						userid = rs.getInt(1);
 					}
 					
 					rs.close();
@@ -203,7 +205,7 @@ public class LoginFrame extends JFrame {
 						JOptionPane.showMessageDialog(LoginFrame.this, "Account or Password not correct");
 						return;
 					} else {
-						StaticDataManager.setUserInfo(user);
+						StaticDataManager.setUserInfo(user, userid);
 						// TODO
 					}
 					
