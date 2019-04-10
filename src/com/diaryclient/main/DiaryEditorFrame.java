@@ -1,6 +1,7 @@
 package com.diaryclient.main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -23,8 +24,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
@@ -53,6 +56,9 @@ public class DiaryEditorFrame extends JFrame {
 	}
 	
 	public DiaryEditorFrame() {
+		JTextArea mainTextArea = new JTextArea();
+		JTextPane mainTextPane = new JTextPane();
+		
 		this.setSize(610, 720);// 设窗体的大小 宽和高
 		this.setLayout(null);
 
@@ -73,10 +79,6 @@ public class DiaryEditorFrame extends JFrame {
 		headerPanel.setBounds(0, 10, 600, 30);
 
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Text Only", "Front", "End" }));
-		comboBox.setBounds(10, 0, 150, 20);
-		headerPanel.add(comboBox);
 
 		Chooser ser = Chooser.getInstance();
 		JTextField txtdate = new JTextField();
@@ -91,9 +93,16 @@ public class DiaryEditorFrame extends JFrame {
 		/******* header panel part end ******/
 
 		/******* text part begin ******/
-
-		JTextPane mainTextPane = new JTextPane();
 		
+		mainTextArea.setBounds(0, 50, 600, 600);
+		mainTextArea.setVisible(false);
+		container.add(mainTextArea);
+		
+		mainTextPane.setEditable(false);
+		mainTextPane.setVisible(true);
+		mainTextPane.setBackground(Color.LIGHT_GRAY);
+
+	
 		HTMLDocument text_html;
 		HTMLEditorKit htmledit;
 		
@@ -152,6 +161,7 @@ public class DiaryEditorFrame extends JFrame {
 		});
 
 		container.add(mainTextPane);
+	
 
 		/******* text part end ******/
 
@@ -161,6 +171,7 @@ public class DiaryEditorFrame extends JFrame {
 		footer.setLayout(null);
 		JButton btnimage = new JButton("add picture");
 		btnimage.setBounds(350, 0, 100, 20);
+		
 		btnimage.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -169,8 +180,6 @@ public class DiaryEditorFrame extends JFrame {
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				chooser.setMultiSelectionEnabled(false);
 				if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(DiaryEditorFrame.this)) {
-					// mainTextPane.setText(mainTextPane.getText() + "\n");
-
 					
 					File file =  new File(this.getClass().getResource("/").getFile(),
 						"../resource/diary/" + StaticDataManager.getUserFolder());
@@ -218,30 +227,21 @@ public class DiaryEditorFrame extends JFrame {
 							height = 600;
 							width = width * 600 / height;
 						}
-						
-
-						String imgtag = String.format("<DIV><img src='file:///%s' width='%d' height='%d'></DIV>", filepath, width, height);
+					
+						String imgtag = String.format("<img src='file:///%s' width='%d' height='%d'>", filepath, width, height);
 						
 						System.out.println(imgtag);
-						try {
-							htmledit.insertHTML(text_html, mainTextPane.getCaretPosition(), 
-									"<BR>", 0, 0,HTML.Tag.BR);
-							
-							htmledit.insertHTML(text_html, mainTextPane.getCaretPosition(), 
-									imgtag, 0, 0,HTML.Tag.IMG);
-							
-							htmledit.insertHTML(text_html, mainTextPane.getCaretPosition(), 
-									"<BR>", 0, 0,HTML.Tag.BR);
-						} catch (BadLocationException | IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+						mainTextArea.append("\n");
+						mainTextArea.append(imgtag);
+						mainTextArea.append("\n");
 					}
 					
 				}
 
 			}
 		});
+		
+		
 		footer.add(btnimage);
 		
 		JButton btnsave = new JButton("save");
@@ -251,7 +251,7 @@ public class DiaryEditorFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				String date = txtdate.getText();
-				String content = mainTextPane.getText();
+				String content = mainTextArea.getText();
 				
 				System.out.println(content);
 			}
@@ -263,6 +263,27 @@ public class DiaryEditorFrame extends JFrame {
 
 		/******* foot part end ******/
 
+		
+		JToggleButton tbEdit  = new JToggleButton("Edit", false);
+		tbEdit.setBounds(10, 0, 100, 20);
+		tbEdit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boolean selected = tbEdit.isSelected();
+				mainTextArea.setVisible(selected);
+				mainTextPane.setVisible(!selected);
+				btnimage.setEnabled(selected);
+			
+				if (!selected) {
+					mainTextPane.setText(mainTextArea.getText().replace("\n", "<BR>"));
+				}
+			}
+			
+			
+		});
+
+		headerPanel.add(tbEdit);
 		
 	}
 }
