@@ -17,7 +17,7 @@ CREATE TABLE `diary`.`photo` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `diaryid` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
-  `photo` BLOB NULL,
+  `photo` LONGBLOB NULL,
   PRIMARY KEY (`id`));
 
 

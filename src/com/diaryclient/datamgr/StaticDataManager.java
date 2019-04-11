@@ -32,14 +32,14 @@ public  class StaticDataManager {
 	
 	public static String getUserFolder(){
 		
-		return "cs";
-		//return _user;
+		//return "cs";
+		return _user;
 		// TODO
 	}
 	
 	public static int getUID() {
-		return 1;
-		//return _uid;
+		//return 1;
+		return _uid;
 		// TODO
 	}
 }

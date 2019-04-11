@@ -88,7 +88,7 @@ private static final long serialVersionUID = -5384012731547358721L;
     }
     
 
-    public ICallback callback;
+    private ICallback callback;
 
     public void setCallback(ICallback callback)
     {

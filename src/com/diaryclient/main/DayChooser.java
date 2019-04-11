@@ -62,6 +62,12 @@ public class DayChooser extends JPanel{
     private static int defaultStartDAY = 0;//0 is from Sun, 1 is from Mon, 2 is from Tue
     private static Color hoverColor = Color.BLUE; // hover color
     
+    public ICallback callback;
+
+    public void setCallback(ICallback callback)
+    {
+       this.callback= callback;
+    }
 
     private DayChooser(java.util.Date date, String format, int startDAY){
         if(startDAY > -1 && startDAY < 7) defaultStartDAY = startDAY;
@@ -183,6 +189,9 @@ public class DayChooser extends JPanel{
         }else if (showDate instanceof JLabel) {
             ((JLabel) showDate).setText(sdf.format(calendar.getTime()));
         }
+        
+        if (callback != null)
+        	callback.callback(sdf.format(calendar.getTime()));
         hidePanel();
     }
 
