@@ -17,12 +17,13 @@ import javax.swing.JTextField;
 
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
+import com.diaryclient.main.MainMenuFrame;
 import com.mysql.cj.xdevapi.Statement;
 
 public class UserProfileFrame extends JFrame {
 
 	public UserProfileFrame(boolean ismodify) {
-		this.setBounds(0, 0, 400, 600);
+		this.setBounds(0, 0, 350, 400);
 		this.setLayout(null);
 
 		// 窗体大小不能改变
@@ -64,6 +65,9 @@ public class UserProfileFrame extends JFrame {
 		JTextField txtaccount = new JTextField();
 		txtaccount.setBounds(70, 70, 150, 20);
         this.add(txtaccount);
+        
+        if(ismodify)
+        	txtaccount.setEnabled(false);
         
         // 密码输入框旁边的文字
         JLabel jl2 = new JLabel("密码");
@@ -120,33 +124,47 @@ public class UserProfileFrame extends JFrame {
 					Connection conn = DBManager.getconn();
 					java.sql.Statement statement = conn.createStatement();
 					
-					String sql = String.format("select count(*) from duser where account= '%s'",user);
+					if (!ismodify){ // when for new account
 					
-					ResultSet rs = statement.executeQuery(sql);
-					int count = 0;
-					
-					while(rs.next()) {
+						String sql = String.format("select count(*) from duser where account= '%s'",user);
 						
-						count = rs.getInt(1);
-					}
-					
-					rs.close();
-					
-					if (count != 0) {
-						JOptionPane.showMessageDialog(UserProfileFrame.this, "Account name has been used.");
-						return;
-					} else {
+						ResultSet rs = statement.executeQuery(sql);
+						int count = 0;
 						
-						sql = String.format("insert into duser (account,password,name, type) values('%s', '%s', '%s', 1)", user, pass,name);
+						while(rs.next()) {
+							
+							count = rs.getInt(1);
+						}
+						
+						rs.close();
+						
+						if (count != 0) {
+							JOptionPane.showMessageDialog(UserProfileFrame.this, "Account name has been used.");
+							return;
+						} else {
+							
+							sql = String.format("insert into duser (account,password,name, type) values('%s', '%s', '%s', 1)", user, pass,name);
+							if (statement.execute(sql)) {
+								System.out.println("Account Insert Failed");
+							}
+							statement.close();
+						}
+					} else { // modify account
+						String sql = String.format("update duser set name = '%s', password = '%s' where id = '%d'", 
+								name,pass, StaticDataManager.getUID());
+						
 						if (statement.execute(sql)) {
 							System.out.println("Account Insert Failed");
 						}
 						statement.close();
+						
 					}
-					
 					conn.close();
 					
 					JOptionPane.showMessageDialog(UserProfileFrame.this, "Account update success.");
+					
+					UserProfileFrame.this.dispose();
+					StaticDataManager.pop();
 					
 				} catch (SQLException e1) {
 					System.out.println("sql error happend!!!");
@@ -157,11 +175,61 @@ public class UserProfileFrame extends JFrame {
 				} finally {
 					bu3.setEnabled(true);
 				}
-				
 			}
 
 		});
         
         this.add(bu3);
+        
+        JButton btnreturn = new JButton("返回");
+        btnreturn.setBounds(180, 250, 65, 20);
+        this.add(btnreturn);
+        btnreturn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				UserProfileFrame.this.dispose();
+				StaticDataManager.pop();
+			}
+		});
+        
+        
+		if (ismodify) {
+			Connection conn = DBManager.getconn();
+			java.sql.Statement statement;
+			try {
+				statement = conn.createStatement();
+
+
+				String sql = String.format("select account, password, name from duser where id= '%d'",
+						StaticDataManager.getUID());
+
+				ResultSet rs = statement.executeQuery(sql);
+
+				String account = null, password = null, name = null;
+				while (rs.next()) {
+
+					account = rs.getString(1);
+					password = rs.getString(2);
+					name = rs.getString(3);
+				}
+
+				rs.close();
+				statement.close();
+				conn.close();
+				
+				txtaccount.setText(account);
+				txtpass.setText(password);
+				txtpass2.setText(password);
+				txtname.setText(name);
+				
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		}
+
 	}
 }

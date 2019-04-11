@@ -13,6 +13,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.swing.BoxLayout;
@@ -37,27 +44,151 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import com.diary.comm.DiaryUtil;
+import com.diary.picturemagr.PictureManager;
+import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
 
 public class DiaryEditorFrame extends JFrame {
-
-	/**
-	 * Launch the application.
-	 */
+	private int _diaryid = -1;
 	
-	public static void main(String[] args) {
+	private JTextArea mainTextArea = new JTextArea();
+	private JTextPane mainTextPane = new JTextPane();
+	
+	private void insert(String strDate) 
+	{
+		if (strDate == null || strDate.equals(""))  return;
+		
+		Date date = DiaryUtil.strToDate(strDate);
 
-		DiaryEditorFrame frame = new DiaryEditorFrame();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			conn = DBManager.getconn();
+			
+			
+			String sql = "insert into diary (userid, date, text) values (?,?,?)";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, StaticDataManager.getUID());
+			ps.setDate(2, new java.sql.Date(date.getTime()));
+			ps.setString(3, mainTextArea.getText());
+			ps.execute();
+			
+			//SELECT LAST_INSERT_ID();
+			sql = "SELECT LAST_INSERT_ID() as id";
+			rs = ps.executeQuery();
+			
+			int diaryid = -1;
+	
+			while (rs.next()) {
+				diaryid = rs.getInt("id");
+			}
 
-		frame.setVisible(true);
-
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+			if (diaryid != -1) {
 				
+				
+				File file =  new File(this.getClass().getResource("/").getFile(),
+						"../resource/diary/" + StaticDataManager.getUserFolder());
+				if (!file.exists() || file.isDirectory()) {
+					// do nothing
+				}  else {
+					
+					File[] files = file.listFiles();
+					
+					for(File subfile:files){
+						if(!file.isDirectory()){
+							PictureManager.readImage2DB(subfile.getCanonicalPath(), diaryid);
+						}
+					}
+				}
+			}
+
+			// TODO
+			conn.close();
+			if (null != ps) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
 	}
 	
+	private void initilization(String strDate){
+		if (strDate == null || strDate.equals(""))  return;
+		
+		Date date = DiaryUtil.strToDate(strDate);
+	
+		
+		Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DBManager.getconn();
+            String sql = "select * from diary where userid =? and date=?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, StaticDataManager.getUID());
+            ps.setDate(2, new java.sql.Date( date.getTime()));
+            rs = ps.executeQuery();
+            int diaryid = -1;
+            String text = "";
+            while (rs.next()) {
+            	diaryid = rs.getInt("id");
+            	text = rs.getString("text");
+            }
+            
+            if (diaryid != -1) {
+            	_diaryid = diaryid;
+            	mainTextArea.setText(text);
+            	mainTextPane.setText(text.replace("\n", "<BR>"));
+            
+            	File file =  new File(this.getClass().getResource("/").getFile(),
+						"../resource/diary/" + StaticDataManager.getUserFolder());
+				if (file.exists() && file.isDirectory()) {
+					// do nothing
+				} else {
+					file.mkdir();
+				}
+			
+				String datefolder = strDate; // yyyy-MM-dd
+				
+				file = new File(file.getPath() +"/" + datefolder);
+				if (file.exists() && file.isDirectory()) {
+					// do nothing
+				} else {
+					file.mkdir();
+				}
+				
+				PictureManager.readDB2Image(file.getCanonicalPath() + "/" , diaryid);
+            	
+            }
+            
+            
+            // TODO
+            conn.close();
+            if (null != ps) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+	}
+
 	public DiaryEditorFrame() {
-		JTextArea mainTextArea = new JTextArea();
-		JTextPane mainTextPane = new JTextPane();
+		
 		
 		this.setSize(610, 720);// 设窗体的大小 宽和高
 		this.setLayout(null);
@@ -79,12 +210,13 @@ public class DiaryEditorFrame extends JFrame {
 		headerPanel.setBounds(0, 10, 600, 30);
 
 		
-
 		DayChooser ser = DayChooser.getInstance();
 		JTextField txtdate = new JTextField();
 		// text.setBounds(10, 10, 400, 20);
 		txtdate.setBounds(600-200+50, 0, 100, 20);
-		txtdate.setText("2019-04-08");
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+		txtdate.setText(df.format(new Date()));
 		ser.register(txtdate);
 		headerPanel.add(txtdate);
 
@@ -128,7 +260,7 @@ public class DiaryEditorFrame extends JFrame {
 		footer.setLayout(null);
 		
 		JButton btninserticon = new JButton("insert icon");
-		btninserticon.setBounds(250, 0, 100, 20);
+		btninserticon.setBounds(40, 0, 100, 20);
 		btninserticon.setEnabled(false);
 		IconPicker  picker= IconPicker.getInstance();
 		
@@ -163,7 +295,7 @@ public class DiaryEditorFrame extends JFrame {
 		footer.add(btninserticon);
 		
 		JButton btnimage = new JButton("insert picture");
-		btnimage.setBounds(370, 0, 100, 20);
+		btnimage.setBounds(150, 0, 100, 20);
 		btnimage.setEnabled(false);
 		
 		btnimage.addActionListener(new ActionListener() {
@@ -238,9 +370,9 @@ public class DiaryEditorFrame extends JFrame {
 		
 		footer.add(btnimage);
 		
-		JButton btnsave = new JButton("save");
-		btnsave.setBounds(480, 0, 100, 20);
-		btnsave.addActionListener(new ActionListener() {
+		JButton btninsert = new JButton("登录");
+		btninsert.setBounds(260, 0, 100, 20);
+		btninsert.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
@@ -251,7 +383,37 @@ public class DiaryEditorFrame extends JFrame {
 			}
 		});
 		
-		footer.add(btnsave);
+		footer.add(btninsert);
+		
+		JButton btnmodify = new JButton("修改");
+		btnmodify.setBounds(370, 0, 100, 20);
+		btnmodify.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String date = txtdate.getText();
+				String content = mainTextArea.getText();
+				
+				System.out.println(content);
+			}
+		});
+		
+		footer.add(btnmodify);
+		
+		JButton btndelete = new JButton("删除");
+		btndelete.setBounds(480, 0, 100, 20);
+		btndelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String date = txtdate.getText();
+				String content = mainTextArea.getText();
+				
+				System.out.println(content);
+			}
+		});
+		
+		footer.add(btndelete);
 
 		container.add(footer);
 
@@ -279,5 +441,8 @@ public class DiaryEditorFrame extends JFrame {
 
 		headerPanel.add(tbEdit);
 		
+		initilization(txtdate.getText());
+		
+		this.setVisible(true);
 	}
 }

@@ -15,7 +15,6 @@ CREATE TABLE `diary`.`duser` (
 
 CREATE TABLE `diary`.`photo` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `userid` INT NOT NULL,
   `diaryid` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `photo` BLOB NULL,
@@ -29,6 +28,3 @@ CREATE TABLE `diary`.`diary` (
   `text` VARCHAR(1000) NULL,
   PRIMARY KEY (`id`));
 
-
-ALTER TABLE `diary`.`photo` 
-ADD COLUMN `date` DATE NOT NULL AFTER `userid`;

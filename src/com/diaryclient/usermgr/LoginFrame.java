@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
+import com.diaryclient.main.MainMenuFrame;
 
 import java.sql.*;
 
@@ -102,6 +103,7 @@ public class LoginFrame extends JFrame {
 					while(rs.next()) {
 						
 						userid = rs.getInt(1);
+						count ++;
 					}
 					
 					rs.close();
@@ -111,8 +113,10 @@ public class LoginFrame extends JFrame {
 						return;
 					} else {
 	
-						// TODO
 						StaticDataManager.setUserInfo(user, userid);
+						MainMenuFrame menu = new MainMenuFrame();
+						StaticDataManager.push(LoginFrame.this);
+						menu.setVisible(true);
 					
 					}
 					
@@ -244,6 +248,7 @@ public class LoginFrame extends JFrame {
 		// ´°Ìå¿É¼û
 		// this.setVisible(true);
 
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	public static void main(String[] args) {

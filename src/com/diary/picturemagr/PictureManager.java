@@ -51,7 +51,7 @@ public class PictureManager {
     }
 	
     
-    public static void readImage2DB(String path) {
+    public static void readImage2DB(String path, int diaryid) {
         //String path = "D:/1.png";
         Connection conn = null;
         PreparedStatement ps = null;
@@ -59,9 +59,9 @@ public class PictureManager {
         try {
             in = readImage(path);
             conn = DBManager.getconn();
-            String sql = "insert into photo (userid,name,photo)values(?,?,?)";
+            String sql = "insert into photo (diaryid,name,photo)values(?,?,?)";
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, StaticDataManager.getUID());
+            ps.setInt(1, diaryid);
             
             String fileName = path.substring(path.lastIndexOf("\\")+1);  
             ps.setString(2, fileName);
@@ -94,17 +94,16 @@ public class PictureManager {
     /*
      * @param	targetPath must end with "/"
      */
-    public static void readDB2Image(String targetPath, Date date) {
+    public static void readDB2Image(String targetPath, int diaryid) {
         //String targetPath = "D:/image/1.png";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             conn = DBManager.getconn();
-            String sql = "select * from photo where userid =? and date=?";
+            String sql = "select * from photo where diaryid=?";
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, StaticDataManager.getUID());
-            ps.setDate(2, date);
+            ps.setInt(1, diaryid);
             rs = ps.executeQuery();
             while (rs.next()) {
                 InputStream in = rs.getBinaryStream("photo");
