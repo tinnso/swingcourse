@@ -91,7 +91,7 @@ public class MainFrame extends JFrame {
 		// datePanel.add(datelable);
 		headerPanel.add(datePanel, BorderLayout.EAST);
 
-		Chooser ser = Chooser.getInstance();
+		DayChooser ser = DayChooser.getInstance();
 		JTextField text = new JTextField();
 		// text.setBounds(10, 10, 400, 20);
 		text.setPreferredSize(new Dimension(100, 20));

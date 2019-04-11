@@ -39,7 +39,7 @@ import javax.swing.event.AncestorListener;
  * @author Ares
  * @Describe(Date Chooser class)
  */
-public class Chooser extends JPanel{
+public class DayChooser extends JPanel{
 
     private static final long serialVersionUID = -5384012731547358720L;
     
@@ -63,7 +63,7 @@ public class Chooser extends JPanel{
     private static Color hoverColor = Color.BLUE; // hover color
     
 
-    private Chooser(java.util.Date date, String format, int startDAY){
+    private DayChooser(java.util.Date date, String format, int startDAY){
         if(startDAY > -1 && startDAY < 7) defaultStartDAY = startDAY;
         int dayIndex = defaultStartDAY;
         for(int i=0; i<7; i++){
@@ -77,17 +77,17 @@ public class Chooser extends JPanel{
         initCalendarPanel();
     }
     
-    public static Chooser getInstance(java.util.Date date, String format){
-        return new Chooser(date, format, defaultStartDAY);
+    public static DayChooser getInstance(java.util.Date date, String format){
+        return new DayChooser(date, format, defaultStartDAY);
     }
 
-    public static Chooser getInstance(java.util.Date date){
+    public static DayChooser getInstance(java.util.Date date){
         return getInstance(date, DEFAULTFORMAT);
     }
-    public static Chooser getInstance(String format){
+    public static DayChooser getInstance(String format){
         return getInstance(new java.util.Date(), format);
     }
-    public static Chooser getInstance(){
+    public static DayChooser getInstance(){
         return getInstance(new java.util.Date(), DEFAULTFORMAT);
     }
     
@@ -483,7 +483,7 @@ public class Chooser extends JPanel{
         private List<DayLabel> list;
         
         public LabelManager(){
-            list = new ArrayList<Chooser.DayLabel>();
+            list = new ArrayList<DayChooser.DayLabel>();
         }
         
         public List<DayLabel> getLabels(){

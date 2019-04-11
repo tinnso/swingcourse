@@ -1,0 +1,34 @@
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456'
+
+
+CREATE SCHEMA `diary` ;
+
+
+CREATE TABLE `diary`.`duser` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `account` VARCHAR(45) NULL,
+  `password` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NULL,
+  `type` INT NULL,
+  PRIMARY KEY (`id`));
+
+
+CREATE TABLE `diary`.`photo` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `userid` INT NOT NULL,
+  `diaryid` INT NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `photo` BLOB NULL,
+  PRIMARY KEY (`id`));
+
+
+CREATE TABLE `diary`.`diary` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `userid` INT NOT NULL,
+  `date` DATE NOT NULL,
+  `text` VARCHAR(1000) NULL,
+  PRIMARY KEY (`id`));
+
+
+ALTER TABLE `diary`.`photo` 
+ADD COLUMN `date` DATE NOT NULL AFTER `userid`;

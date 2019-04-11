@@ -80,7 +80,7 @@ public class DiaryEditorFrame extends JFrame {
 
 		
 
-		Chooser ser = Chooser.getInstance();
+		DayChooser ser = DayChooser.getInstance();
 		JTextField txtdate = new JTextField();
 		// text.setBounds(10, 10, 400, 20);
 		txtdate.setBounds(600-200+50, 0, 100, 20);
@@ -115,62 +115,56 @@ public class DiaryEditorFrame extends JFrame {
 		mainTextPane.setBounds(0, 50, 600, 600);
 		//mainTextPane.setFont(new Font("·ÂËÎ", Font.PLAIN, 20));
 
-		// for insert icon
-		StyledDocument doc = mainTextPane.getStyledDocument();
-
-		mainTextPane.addKeyListener(new KeyAdapter() {
-			public void keyTyped(KeyEvent e) {
-
-				char keyChar = e.getKeyChar();
-
-				if (IconHandler.getInstance().checkPattern(keyChar, doc.getLength())) {
-					try {
-						System.out.println(String.format("%d, %d", IconHandler.getInstance().getStart(),
-								IconHandler.getInstance().getOffset() - 1));
-
-						doc.remove(IconHandler.getInstance().getStart(), IconHandler.getInstance().getOffset() - 1);
-
-						String iconname = IconHandler.getInstance().getIconPath();
-
-						if (iconname != null) {
-							
-							String filepath = new File(this.getClass().getResource("/").getFile(),
-									"../resource/icons/" + iconname).getCanonicalPath();
-
-							String imgtag = String.format("<img src='file:///%s' width='20' height='20'>", filepath);
-							
-							System.out.println(imgtag);
-							htmledit.insertHTML(text_html, mainTextPane.getCaretPosition(), 
-									imgtag, 0, 0,HTML.Tag.IMG);
-							
-						}
-
-						// stop other event handling
-						e.consume();
-
-					} catch (BadLocationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-
-			}
-		});
-
 		container.add(mainTextPane);
 	
 
 		/******* text part end ******/
 
 		/******* foot part begin ******/
+		
+		
 		JPanel footer = new JPanel();
 		footer.setBounds(0, 660, 600, 30);
 		footer.setLayout(null);
-		JButton btnimage = new JButton("add picture");
-		btnimage.setBounds(350, 0, 100, 20);
+		
+		JButton btninserticon = new JButton("insert icon");
+		btninserticon.setBounds(250, 0, 100, 20);
+		btninserticon.setEnabled(false);
+		IconPicker  picker= IconPicker.getInstance();
+		
+		picker.register(btninserticon);
+		
+		picker.setCallback(new ICallback(){
+
+			@Override
+			public void callback(String args) {
+				if (args == null || args.equals("")) return;
+				
+				String filepath;
+				try {
+					filepath = new File(this.getClass().getResource("/").getFile(),
+							"../resource/icons/" + args).getCanonicalPath();
+					
+					String imgtag = String.format("<img src='file:///%s' width='20' height='20'>", filepath);
+					System.out.println(imgtag);
+					mainTextArea.append(imgtag);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				
+			}
+			
+			
+		});
+		
+		footer.add(btninserticon);
+		
+		JButton btnimage = new JButton("insert picture");
+		btnimage.setBounds(370, 0, 100, 20);
+		btnimage.setEnabled(false);
 		
 		btnimage.addActionListener(new ActionListener() {
 			@Override
