@@ -59,6 +59,8 @@ import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
 
 public class DiaryEditorFrame extends JFrame {
+	private static final int WINDOW_WIDTH = 700;
+	
 	private int _diaryid = -1;
 	private String _date = null;
 	private int _indexcount = 0;
@@ -97,8 +99,8 @@ public class DiaryEditorFrame extends JFrame {
 			
 			_indexcount++;
 		}
-		
-		String result = doc.toString(); 
+	
+		String result = doc.body().html(); 
 		System.out.println("Html document after zip:" + result);
 		
 		return result;
@@ -117,7 +119,7 @@ public class DiaryEditorFrame extends JFrame {
 			element.attr("src", _links.get(key));
 			
 		}
-		String result = doc.toString(); 
+		String result = doc.body().html(); 
 		System.out.println("Html document after unzip:" + result);
 		
 		return result;
@@ -360,7 +362,8 @@ public class DiaryEditorFrame extends JFrame {
 			if (diaryid != -1) {
 				_diaryid = diaryid;
 				mainTextArea.setText(zipurl(text));
-				mainTextPane.setText(text.replace("\n", "<BR>"));
+				mainTextPane.setText(text);
+				//mainTextPane.setText(text.replace("\n", "<BR>"));
 
 				File file = new File(this.getClass().getResource("/").getFile(),
 						"../resource/diary/" + StaticDataManager.getUserFolder());
@@ -409,7 +412,7 @@ public class DiaryEditorFrame extends JFrame {
 
 	public DiaryEditorFrame() {
 
-		this.setSize(610, 720);// 设窗体的大小 宽和高
+		this.setSize(WINDOW_WIDTH + 10, 720);// 设窗体的大小 宽和高
 		this.setLayout(null);
 
 		// 窗体大小不能改变
@@ -425,7 +428,7 @@ public class DiaryEditorFrame extends JFrame {
 		// JPanel headerPanel=new JPanel(new GridLayout(1,3,10,10));
 		JPanel headerPanel = new JPanel();
 		headerPanel.setLayout(null);
-		headerPanel.setBounds(0, 10, 600, 30);
+		headerPanel.setBounds(0, 10, WINDOW_WIDTH, 30);
 
 		DayChooser ser = DayChooser.getInstance();
 		
@@ -447,7 +450,7 @@ public class DiaryEditorFrame extends JFrame {
 		});
 		
 		// text.setBounds(10, 10, 400, 20);
-		txtdate.setBounds(600 - 200 + 50, 0, 100, 20);
+		txtdate.setBounds(WINDOW_WIDTH - 200 + 50, 0, 100, 20);
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
 		txtdate.setText(df.format(new Date()));
@@ -460,7 +463,7 @@ public class DiaryEditorFrame extends JFrame {
 
 		/******* text part begin ******/
 
-		mainTextArea.setBounds(0, 50, 600, 600);
+		mainTextArea.setBounds(0, 50, WINDOW_WIDTH, 600);
 		mainTextArea.setVisible(false);
 		container.add(mainTextArea);
 
@@ -477,7 +480,7 @@ public class DiaryEditorFrame extends JFrame {
 		mainTextPane.setContentType("text/html");
 		mainTextPane.setDocument(text_html);
 
-		mainTextPane.setBounds(0, 50, 600, 600);
+		mainTextPane.setBounds(0, 50, WINDOW_WIDTH, 600);
 		// mainTextPane.setFont(new Font("仿宋", Font.PLAIN, 20));
 
 		container.add(mainTextPane);
@@ -487,10 +490,10 @@ public class DiaryEditorFrame extends JFrame {
 		/******* foot part begin ******/
 
 		JPanel footer = new JPanel();
-		footer.setBounds(0, 660, 600, 30);
+		footer.setBounds(0, 660, WINDOW_WIDTH, 30);
 		footer.setLayout(null);
 
-		JButton btninserticon = new JButton("insert icon");
+		JButton btninserticon = new JButton("插入表情");
 		btninserticon.setBounds(40, 0, 100, 20);
 		btninserticon.setEnabled(false);
 		IconPicker picker = IconPicker.getInstance();
@@ -530,7 +533,7 @@ public class DiaryEditorFrame extends JFrame {
 
 		footer.add(btninserticon);
 
-		JButton btnimage = new JButton("insert picture");
+		JButton btnimage = new JButton("插入图片");
 		btnimage.setBounds(150, 0, 100, 20);
 		btnimage.setEnabled(false);
 
@@ -581,9 +584,9 @@ public class DiaryEditorFrame extends JFrame {
 						ImageIcon imageIcon = new ImageIcon(sourcefile.toString()); // Icon由图片文件形成
 						int width = imageIcon.getIconWidth();
 						int height = imageIcon.getIconHeight();
-						if (width >= 600) {
-							width = 600;
-							height = imageIcon.getIconHeight() * 600 / imageIcon.getIconWidth();
+						if (width >= WINDOW_WIDTH) {
+							width = WINDOW_WIDTH;
+							height = imageIcon.getIconHeight() * WINDOW_WIDTH / imageIcon.getIconWidth();
 						}
 
 						if (height >= 600) {
@@ -660,6 +663,19 @@ public class DiaryEditorFrame extends JFrame {
 		});
 
 		footer.add(btndelete);
+		
+		JButton btnreturn = new JButton("返回主菜单");
+		btnreturn.setBounds(590, 0, 100, 20);
+		btnreturn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				DiaryEditorFrame.this.dispose();
+				StaticDataManager.pop();
+			}
+		});
+
+		footer.add(btnreturn);
 
 		container.add(footer);
 
@@ -680,9 +696,12 @@ public class DiaryEditorFrame extends JFrame {
 				if (!selected) {
 					tbEdit.setText("观看模式");
 					String text = mainTextArea.getText();
+					System.out.println("text from text area: " + text);
 					text = unzipurl(text);
+					//text =text.replace("\n", "<BR>");
+					System.out.println("text after unzip: " + text);
 					
-					mainTextPane.setText(text.replace("\n", "<BR>"));
+					mainTextPane.setText(text);
 				} else {
 					tbEdit.setText("编辑模式");
 				}
