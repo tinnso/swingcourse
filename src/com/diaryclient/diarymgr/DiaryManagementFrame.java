@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -28,6 +29,7 @@ import org.jsoup.select.Elements;
 import com.diary.picturemagr.PictureManager;
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
+import com.diaryclient.usermgr.UserProfileFrame;
 
 public class DiaryManagementFrame extends JFrame {
 	
@@ -168,15 +170,30 @@ public class DiaryManagementFrame extends JFrame {
 		this.add(btnallselect);
 		
 		btnmodify = new JButton("ÐÞ¸Ä");
+		btnmodify.setBounds(120, 310, 100, 20);
 		btnmodify.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				int checkedcount = 0;
+				for(Boolean b : _datamodel.checks) {
+					if (b) {
+						checkedcount ++;
+					}
+				}
 				
+				if (checkedcount > 1) {
+					JOptionPane.showMessageDialog(DiaryManagementFrame.this, "You can only selected one Diary!");
+					return;
+				} else if (checkedcount == 0) {
+					JOptionPane.showMessageDialog(DiaryManagementFrame.this, "Please select one Diary!");
+					return;
+				}
 			}
 			
 		});
+		this.add(btnmodify);
 		
 		btndelete = new JButton("É¾³ý");
 		btndelete.addActionListener(new ActionListener() {
