@@ -142,7 +142,7 @@ public class DiaryEditorFrame extends JFrame {
 			
 			conn = DBManager.getconn();
 
-			String sql = "insert into diary (userid, date, text) values (?,?,?)";
+			String sql = "insert into diary (userid, date, text, updatedate, insertdate) values (?,?,?,sysdate(),sysdate())";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, StaticDataManager.getUID());
 			ps.setDate(2, new java.sql.Date(date.getTime()));
@@ -246,7 +246,7 @@ public class DiaryEditorFrame extends JFrame {
 		try {
 			conn = DBManager.getconn();
 
-			String sql = "update diary set userid=?, date=?, text=? where id=?";
+			String sql = "update diary set userid=?, date=?, text=?, updatedate=sysdate() where id=?";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, StaticDataManager.getUID());
 			ps.setDate(2, new java.sql.Date(date.getTime()));
@@ -664,7 +664,7 @@ public class DiaryEditorFrame extends JFrame {
 
 		footer.add(btndelete);
 		
-		JButton btnreturn = new JButton("返回主菜单");
+		JButton btnreturn = new JButton("返回上一画面");
 		btnreturn.setBounds(590, 0, 100, 20);
 		btnreturn.addActionListener(new ActionListener() {
 			@Override

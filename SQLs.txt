@@ -26,5 +26,6 @@ CREATE TABLE `diary`.`diary` (
   `userid` INT NOT NULL,
   `date` DATE NOT NULL,
   `text` VARCHAR(1000) NULL,
+  `updatedate` DATETIME NULL,
   PRIMARY KEY (`id`));
 
