@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import com.diaryclient.datamgr.StaticDataManager;
+import com.diaryclient.diarymgr.DiaryManagementFrame;
 import com.diaryclient.usermgr.UserProfileFrame;
 
 public class MainMenuFrame extends JFrame {
@@ -51,7 +52,7 @@ public class MainMenuFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StaticDataManager.push(MainMenuFrame.this);
-				DiaryEditorFrame diary = new DiaryEditorFrame();
+				DiaryEditorFrame diary = new DiaryEditorFrame(null);
 			}
 			
 		});
@@ -60,12 +61,22 @@ public class MainMenuFrame extends JFrame {
 		btndiarymgr.setBounds(40, 100, 200, 30);
 		this.add(btndiarymgr);
 		
+		btndiarymgr.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				StaticDataManager.push(MainMenuFrame.this);
+				DiaryManagementFrame diary = new DiaryManagementFrame();
+			}
+			
+		});
+		
 		
 		JButton btnremind = new JButton("备忘录");
 		btnremind.setBounds(40, 140, 200, 30);
 		this.add(btnremind);
 		
-		JButton btnback = new JButton("回登陆画面");
+		JButton btnback = new JButton("返回");
 		btnback.setBounds(40, 180, 200, 30);
 		this.add(btnback);
 		

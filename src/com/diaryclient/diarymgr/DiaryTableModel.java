@@ -12,11 +12,13 @@ public class DiaryTableModel extends AbstractTableModel {
 
 	private String[] columnNames = {"选择", "日记日期","记录日期","更新日期"};
 	public List<Boolean> checks;
-	public List<String> dates;
+	public List<Date> dates;
 	public List<Date> updatedates;
 	public List<Date> insertdates;
+	public List<Integer> diaryids;
 	
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	SimpleDateFormat datetimeformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Override
 	public int getRowCount() {
@@ -32,19 +34,39 @@ public class DiaryTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		
+		Date tmpDate = null;
+		
 		switch (columnIndex) {
 			case 0:
 				return checks.get(rowIndex);
 		
 			case 1:
-				return dates.get(rowIndex);
+				tmpDate = dates.get(rowIndex);
+				if (null != tmpDate) {
+					return dateformat.format(tmpDate);
+				} else {
+					return "";
+				}
+	
 
 			case 2:
-				return sdf.format(insertdates.get(rowIndex));
+				tmpDate = insertdates.get(rowIndex);
+				if (null != tmpDate) {
+					return datetimeformat.format(tmpDate);
+				} else {
+					return "";
+				}
+				
+				
 				
 			case 3:
-				return sdf.format(updatedates.get(rowIndex));
-
+				tmpDate = updatedates.get(rowIndex);
+				if (null != tmpDate) {
+					return datetimeformat.format(tmpDate);
+				} else {
+					return "";
+				}
 			default:
 					return 0;
 			

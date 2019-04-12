@@ -313,8 +313,9 @@ public class DiaryEditorFrame extends JFrame {
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, _diaryid);
 			ps.execute();
-
-
+			
+			ps.close();
+			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -357,6 +358,8 @@ public class DiaryEditorFrame extends JFrame {
 			while (rs.next()) {
 				diaryid = rs.getInt("id");
 				text = rs.getString("text");
+				
+				// TODO should change text's url to real URL
 			}
 
 			if (diaryid != -1) {
@@ -377,6 +380,8 @@ public class DiaryEditorFrame extends JFrame {
 
 				file = new File(file.getPath() + "/" + datefolder);
 				if (file.exists() && file.isDirectory()) {
+					// TODO should delete the files here.
+					
 					// do nothing
 				} else {
 					file.mkdir();
@@ -410,7 +415,7 @@ public class DiaryEditorFrame extends JFrame {
 		}
 	}
 
-	public DiaryEditorFrame() {
+	public DiaryEditorFrame(String strDate) {
 
 		this.setSize(WINDOW_WIDTH + 10, 720);// 设窗体的大小 宽和高
 		this.setLayout(null);
@@ -452,8 +457,13 @@ public class DiaryEditorFrame extends JFrame {
 		// text.setBounds(10, 10, 400, 20);
 		txtdate.setBounds(WINDOW_WIDTH - 200 + 50, 0, 100, 20);
 
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
-		txtdate.setText(df.format(new Date()));
+		if (null == strDate || strDate.contentEquals("")) {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");// 设置日期格式
+			txtdate.setText(df.format(new Date()));
+		} else {
+			txtdate.setText(strDate);
+		}
+		
 		ser.register(txtdate);
 		headerPanel.add(txtdate);
 
@@ -664,7 +674,7 @@ public class DiaryEditorFrame extends JFrame {
 
 		footer.add(btndelete);
 		
-		JButton btnreturn = new JButton("返回上一画面");
+		JButton btnreturn = new JButton("返回");
 		btnreturn.setBounds(590, 0, 100, 20);
 		btnreturn.addActionListener(new ActionListener() {
 			@Override
