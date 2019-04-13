@@ -153,14 +153,14 @@ public class UserEditFrame extends JFrame {
 							return;
 						} else {
 							
-							sql = String.format("insert into duser (account,password,name, type) values('%s', '%s', '%s', 1)", user, pass,name);
+							sql = String.format("insert into duser (account,password,name, type, updatedate, insertdate) values('%s', '%s', '%s', 1,sysdate(),sysdate())", user, pass,name);
 							if (statement.execute(sql)) {
 								System.out.println("Account Insert Failed");
 							}
 							statement.close();
 						}
 					} else { // modify account
-						String sql = String.format("update duser set name = '%s', password = '%s' where id = '%d'", 
+						String sql = String.format("update duser set name = '%s', password = '%s', updatedate=sysdate(), insertdate=sysdate() where id = '%d'", 
 								name,pass, StaticDataManager.getUID());
 						
 						if (statement.execute(sql)) {

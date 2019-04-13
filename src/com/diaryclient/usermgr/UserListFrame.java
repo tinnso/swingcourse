@@ -66,7 +66,7 @@ public class UserListFrame extends JFrame {
 			while (rs.next()) {
 				checkeds.add(false);
 				accounts.add(rs.getString("account"));
-				names.add(rs.getString("account"));
+				names.add(rs.getString("name"));
 				types.add(rs.getInt("type"));
 				updatedates.add(rs.getTimestamp("updatedate"));
 				insertdates.add(rs.getTimestamp("insertdate"));
@@ -101,6 +101,7 @@ public class UserListFrame extends JFrame {
 			_datamodel.updatedates = updatedates;
 			_datamodel.insertdates = insertdates;
 			_datamodel.userids = userids;
+			_datamodel.deleteds = deleteds;
 			
 			_datatable.setModel(_datamodel);
 			
@@ -116,7 +117,7 @@ public class UserListFrame extends JFrame {
 			conn = DBManager.getconn();
 			
 			for (Integer id :userids) {
-				String sql = "update duser set deleted = 1 where id=?";
+				String sql = "update duser set deleted = 1, updatedate=sysdate() where id=?";
 				ps = conn.prepareStatement(sql);
 				ps.setInt(1, id);
 	
@@ -180,25 +181,27 @@ public class UserListFrame extends JFrame {
 		
 		btnadd = new JButton("×·¼Ó");
 		btnadd.setBounds(150, 310, 100, 20);
-		btnmodify.addActionListener(new ActionListener() {
+		btnadd.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				StaticDataManager.push(UserListFrame.this);
 				UserEditFrame frame = new UserEditFrame(false, -1);
+				frame.setVisible(true);
 				frame.setCallback(new ICallback() {
 
 					@Override
 					public void callback(String args) {
 						initilization();
+						_datatable.updateUI();
 					}
 					
 				});
 			}
 			
 		});
-		this.add(btnmodify);
+		this.add(btnadd);
 		
 		
 		btnmodify = new JButton("ÐÞ¸Ä");
@@ -230,11 +233,13 @@ public class UserListFrame extends JFrame {
 				
 				StaticDataManager.push(UserListFrame.this);
 				UserEditFrame frame = new UserEditFrame(true, userid);
+				frame.setVisible(true);
 				
 				frame.setCallback(new ICallback() {
 					@Override
 					public void callback(String args) {
 						initilization();
+						_datatable.updateUI();
 					}
 					
 				});
@@ -244,7 +249,7 @@ public class UserListFrame extends JFrame {
 		this.add(btnmodify);
 
 		btndelete = new JButton("É¾³ý");
-		btndelete.setBounds(260, 310, 100, 20);
+		btndelete.setBounds(370, 310, 100, 20);
 		btndelete.addActionListener(new ActionListener() {
 
 			@Override
@@ -266,6 +271,7 @@ public class UserListFrame extends JFrame {
 				} else {
 					delete(userids);
 					initilization();
+					_datatable.updateUI();
 				};
 			}
 			

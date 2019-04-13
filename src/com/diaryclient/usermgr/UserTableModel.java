@@ -34,6 +34,11 @@ public class UserTableModel extends AbstractTableModel {
 	}
 
 	@Override
+	public String getColumnName(int column) {
+		return columnNames[column];
+	}
+	
+	@Override
 	public int getColumnCount() {
 		return columnNames.length;
 	}
@@ -53,7 +58,7 @@ public class UserTableModel extends AbstractTableModel {
 				return names.get(rowIndex);
 				
 			case 3:
-				return types.get(rowIndex) == 0 ? "普通用户":"管理员";
+				return types.get(rowIndex) == 1 ? "普通用户":"管理员";
 
 			case 4:
 				tmpDate = insertdates.get(rowIndex);
@@ -77,6 +82,46 @@ public class UserTableModel extends AbstractTableModel {
 					return 0;
 			
 		}
+	}
+	
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		switch (columnIndex) {
+		case 0:
+			return Boolean.class;
+		case 1:
+			return String.class;
+		case 2:
+			return String.class;
+			
+		case 3:
+			return String.class;
+		case 5:
+			return String.class;
+		case 6:
+			return String.class;
+
+		default:
+			return String.class;
+		
+		}
+	}
+	
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) { 
+		if(columnIndex > 0) return false; 
+		return true;
+	}
+	
+	@Override
+	public void setValueAt(Object value, int rowIndex, int columnIndex) {
+		System.out.println("[row: "+ rowIndex + ", column: " + columnIndex + ", value: " + value + " ]");
+		
+		if (columnIndex == 0)
+		{
+			checks.set(rowIndex, (Boolean)value);
+		}
+		 
 	}
 
 }

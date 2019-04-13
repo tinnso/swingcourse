@@ -212,6 +212,10 @@ public class LoginFrame extends JFrame {
 						return;
 					} else {
 						StaticDataManager.setUserInfo(user, userid);
+						
+						UserListFrame frame = new  UserListFrame();
+						StaticDataManager.push(LoginFrame.this);
+						frame.setVisible(true);
 					}
 					
 					conn.close();
