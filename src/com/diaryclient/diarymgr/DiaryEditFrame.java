@@ -227,12 +227,11 @@ public class DiaryEditFrame extends JFrame {
 		try {
 			conn = DBManager.getconn();
 
-			String sql = "update diary set userid=?, date=?, text=?, updatedate=sysdate() where id=?";
+			String sql = "update diary date=?, text=?, updatedate=sysdate() where id=?";
 			ps = conn.prepareStatement(sql);
-			ps.setInt(1, StaticDataManager.getUID());
-			ps.setDate(2, new java.sql.Date(date.getTime()));
-			ps.setString(3, text);
-			ps.setInt(4, _diaryid);
+			ps.setDate(1, new java.sql.Date(date.getTime()));
+			ps.setString(2, text);
+			ps.setInt(3, _diaryid);
 			ps.execute();
 
 			// SELECT LAST_INSERT_ID();

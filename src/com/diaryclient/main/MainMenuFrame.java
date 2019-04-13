@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import com.diaryclient.datamgr.StaticDataManager;
 import com.diaryclient.diarymgr.DiaryEditFrame;
 import com.diaryclient.diarymgr.DiaryListFrame;
+import com.diaryclient.remindermgr.ReminderListFrame;
 import com.diaryclient.usermgr.UserEditFrame;
 
 public class MainMenuFrame extends JFrame {
@@ -82,6 +83,17 @@ public class MainMenuFrame extends JFrame {
 		JButton btnremind = new JButton("±¸ÍüÂ¼");
 		btnremind.setBounds(40, 140, 200, 30);
 		this.add(btnremind);
+		btnremind.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				StaticDataManager.push(MainMenuFrame.this);
+				ReminderListFrame frame = new ReminderListFrame();
+				frame.setVisible(true);
+			}
+			
+		});
+		
 		
 		JButton btnback = new JButton("·µ»Ø");
 		btnback.setBounds(40, 180, 200, 30);
