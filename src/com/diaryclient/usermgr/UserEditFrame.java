@@ -20,9 +20,9 @@ import com.diaryclient.datamgr.StaticDataManager;
 import com.diaryclient.main.MainMenuFrame;
 import com.mysql.cj.xdevapi.Statement;
 
-public class UserProfileFrame extends JFrame {
+public class UserEditFrame extends JFrame {
 
-	public UserProfileFrame(boolean ismodify) {
+	public UserEditFrame(boolean ismodify) {
 		this.setBounds(0, 0, 350, 400);
 		this.setLayout(null);
 
@@ -112,12 +112,12 @@ public class UserProfileFrame extends JFrame {
 					String name = txtname.getText();
 					
 					if("".equals(user)) {
-						JOptionPane.showMessageDialog(UserProfileFrame.this, "You must input the account!");
+						JOptionPane.showMessageDialog(UserEditFrame.this, "You must input the account!");
 						return;
 					}
 					
 					if (!pass.equals(pass2)) {
-						JOptionPane.showMessageDialog(UserProfileFrame.this, "Two time password input are not the same!");
+						JOptionPane.showMessageDialog(UserEditFrame.this, "Two time password input are not the same!");
 						return;
 					}
 					
@@ -139,7 +139,7 @@ public class UserProfileFrame extends JFrame {
 						rs.close();
 						
 						if (count != 0) {
-							JOptionPane.showMessageDialog(UserProfileFrame.this, "Account name has been used.");
+							JOptionPane.showMessageDialog(UserEditFrame.this, "Account name has been used.");
 							return;
 						} else {
 							
@@ -161,9 +161,9 @@ public class UserProfileFrame extends JFrame {
 					}
 					conn.close();
 					
-					JOptionPane.showMessageDialog(UserProfileFrame.this, "Account update success.");
+					JOptionPane.showMessageDialog(UserEditFrame.this, "Account update success.");
 					
-					UserProfileFrame.this.dispose();
+					UserEditFrame.this.dispose();
 					StaticDataManager.pop();
 					
 				} catch (SQLException e1) {
@@ -189,7 +189,7 @@ public class UserProfileFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				UserProfileFrame.this.dispose();
+				UserEditFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 		});

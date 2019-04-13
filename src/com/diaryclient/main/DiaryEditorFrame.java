@@ -54,6 +54,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.diary.comm.DiaryUtil;
+import com.diary.comm.ICallback;
 import com.diary.picturemagr.PictureManager;
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;

@@ -36,6 +36,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
+import com.diary.comm.ICallback;
+
 
 
 public class IconPicker extends JPanel {

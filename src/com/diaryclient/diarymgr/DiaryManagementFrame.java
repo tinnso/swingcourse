@@ -37,7 +37,7 @@ import com.diary.picturemagr.PictureManager;
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
 import com.diaryclient.main.DiaryEditorFrame;
-import com.diaryclient.usermgr.UserProfileFrame;
+import com.diaryclient.usermgr.UserEditFrame;
 
 public class DiaryManagementFrame extends JFrame {
 	

@@ -1,4 +1,4 @@
-package com.diaryclient.main;
+package com.diary.comm;
 
 public interface ICallback {
 	

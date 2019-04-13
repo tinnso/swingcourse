@@ -2,7 +2,7 @@ package com.diaryclient.main;
 
 /**
  *
- * @author cs
+ * @deprecated
  *
  */
 public class IconHandler {

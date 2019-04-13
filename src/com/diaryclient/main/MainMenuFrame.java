@@ -11,7 +11,7 @@ import javax.swing.WindowConstants;
 
 import com.diaryclient.datamgr.StaticDataManager;
 import com.diaryclient.diarymgr.DiaryManagementFrame;
-import com.diaryclient.usermgr.UserProfileFrame;
+import com.diaryclient.usermgr.UserEditFrame;
 
 public class MainMenuFrame extends JFrame {
 	
@@ -38,7 +38,7 @@ public class MainMenuFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StaticDataManager.push(MainMenuFrame.this);
-				UserProfileFrame profile = new UserProfileFrame(true);
+				UserEditFrame profile = new UserEditFrame(true);
 			}
 			
 		});

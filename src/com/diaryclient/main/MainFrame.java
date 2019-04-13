@@ -35,6 +35,11 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 
+/**
+ * 
+ * @deprecated
+ *
+ */
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
