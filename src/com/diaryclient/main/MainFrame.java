@@ -3,18 +3,14 @@ package com.diaryclient.main;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledDocument;
 
-import diaryclient.main.test.JTextPane2;
+import com.diaryclient.diarymgr.DayPicker;
 
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -24,15 +20,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 
 /**
@@ -42,7 +34,11 @@ import javax.swing.ImageIcon;
  */
 public class MainFrame extends JFrame {
 
-	private JPanel contentPane;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 
 	/**
 	 * Launch the application.
@@ -83,10 +79,6 @@ public class MainFrame extends JFrame {
 		// BoxLayout headerlayout=new BoxLayout(headerPanel, BoxLayout.X_AXIS);
 		headerPanel.setLayout(new BorderLayout());
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Text Only", "Front", "End" }));
-		comboBox.setPreferredSize(new Dimension(150, 20));
-		headerPanel.add(comboBox, BorderLayout.WEST);
 
 		JLabel lable = new JLabel("");
 		headerPanel.add(lable, BorderLayout.CENTER);
@@ -96,7 +88,7 @@ public class MainFrame extends JFrame {
 		// datePanel.add(datelable);
 		headerPanel.add(datePanel, BorderLayout.EAST);
 
-		DayChooser ser = DayChooser.getInstance();
+		DayPicker ser = DayPicker.getInstance();
 		JTextField text = new JTextField();
 		// text.setBounds(10, 10, 400, 20);
 		text.setPreferredSize(new Dimension(100, 20));
@@ -157,7 +149,6 @@ public class MainFrame extends JFrame {
 						e.consume();
 
 					} catch (BadLocationException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -217,7 +208,6 @@ public class MainFrame extends JFrame {
 
 		setTitle("JPanel面板的案例");
 		setSize(600, 300);// 设窗体的大小 宽和高
-		setVisible(true);// 设定窗体的可视化
 		// 设置窗体的关闭方式
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 

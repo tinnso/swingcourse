@@ -10,6 +10,9 @@ CREATE TABLE `diary`.`duser` (
   `password` VARCHAR(45) NULL,
   `name` VARCHAR(45) NULL,
   `type` INT NULL,
+  `deleted` TINYINT NULL DEFAULT 0,
+  `insertdate` DATETIME NULL,
+  `updatedate` DATETIME NULL,
   PRIMARY KEY (`id`));
 
 

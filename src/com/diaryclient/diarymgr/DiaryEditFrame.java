@@ -1,21 +1,13 @@
-package com.diaryclient.main;
+package com.diaryclient.diarymgr;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,26 +17,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.Vector;
-
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
-import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyledDocument;
-import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
@@ -53,13 +35,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.diary.comm.DiaryUtil;
-import com.diary.comm.ICallback;
-import com.diary.picturemagr.PictureManager;
+import com.diaryclient.comm.DiaryUtil;
+import com.diaryclient.comm.ICallback;
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
+import com.diaryclient.picturemagr.PictureManager;
 
-public class DiaryEditorFrame extends JFrame {
+public class DiaryEditFrame extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static final int WINDOW_WIDTH = 700;
 	
 	private int _diaryid = -1;
@@ -183,16 +170,11 @@ public class DiaryEditorFrame extends JFrame {
 
 			}
 
-			// TODO
+			ps.close();
 			conn.close();
-			if (null != ps) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -219,7 +201,6 @@ public class DiaryEditorFrame extends JFrame {
 			picturepatch = file.getCanonicalPath();
 		
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -236,7 +217,6 @@ public class DiaryEditorFrame extends JFrame {
 
 		Connection conn = null;
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		
 		String text = mainTextArea.getText();
 		
@@ -273,16 +253,11 @@ public class DiaryEditorFrame extends JFrame {
 					PictureManager.readImage2DB(imgUrl, _diaryid);
 			}
 
-			// TODO
+			ps.close();
 			conn.close();
-			if (null != ps) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
+			
+		}catch (SQLException e) {
+				e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -290,15 +265,10 @@ public class DiaryEditorFrame extends JFrame {
 		}
 	}
 	
-	private void delete(String strDate) {
-		if (strDate == null || strDate.equals(""))
-			return;
-
-		Date date = DiaryUtil.strToDate(strDate);
+	private void delete() {
 
 		Connection conn = null;
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		
 		try {
 			conn = DBManager.getconn();
@@ -383,7 +353,6 @@ public class DiaryEditorFrame extends JFrame {
 				if (file.exists() && file.isDirectory()) {
 					// TODO should delete the files here.
 					
-					// do nothing
 				} else {
 					file.mkdir();
 				}
@@ -398,16 +367,8 @@ public class DiaryEditorFrame extends JFrame {
 				btnmodify.setEnabled(false);
 				btndelete.setEnabled(false);
 			}
-
-			// TODO
 			conn.close();
-			if (null != ps) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			ps.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -416,7 +377,7 @@ public class DiaryEditorFrame extends JFrame {
 		}
 	}
 
-	public DiaryEditorFrame(String strDate) {
+	public DiaryEditFrame(String strDate) {
 
 		this.setSize(WINDOW_WIDTH + 10, 720);// 设窗体的大小 宽和高
 		this.setLayout(null);
@@ -436,7 +397,7 @@ public class DiaryEditorFrame extends JFrame {
 		headerPanel.setLayout(null);
 		headerPanel.setBounds(0, 10, WINDOW_WIDTH, 30);
 
-		DayChooser ser = DayChooser.getInstance();
+		DayPicker ser = DayPicker.getInstance();
 		
 		// when user change the date, initialize this page again
 		ser.setCallback(new ICallback() {
@@ -534,7 +495,6 @@ public class DiaryEditorFrame extends JFrame {
 					mainTextArea.append(imgtag);
 
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -555,7 +515,7 @@ public class DiaryEditorFrame extends JFrame {
 				chooser.setFileFilter(new FileNameExtensionFilter("image(*.jpg, *.png, *.gif)", "jpg", "png", "gif"));
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				chooser.setMultiSelectionEnabled(false);
-				if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(DiaryEditorFrame.this)) {
+				if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(DiaryEditFrame.this)) {
 
 					File file = new File(this.getClass().getResource("/").getFile(),
 							"../resource/diary/" + StaticDataManager.getUserFolder());
@@ -586,7 +546,6 @@ public class DiaryEditorFrame extends JFrame {
 						filepath = destfile.getCanonicalPath();
 
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 
@@ -633,8 +592,6 @@ public class DiaryEditorFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				String date = txtdate.getText();
-				String content = mainTextArea.getText();
-
 				insert(date);
 
 			}
@@ -663,13 +620,7 @@ public class DiaryEditorFrame extends JFrame {
 		btndelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				String date = txtdate.getText();
-				String content = mainTextArea.getText();
-				
-				delete(date);
-
-				System.out.println(content);
+				delete();
 			}
 		});
 
@@ -681,7 +632,7 @@ public class DiaryEditorFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				DiaryEditorFrame.this.dispose();
+				DiaryEditFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 		});
@@ -724,7 +675,6 @@ public class DiaryEditorFrame extends JFrame {
 
 		initilization(txtdate.getText());
 
-		this.setVisible(true);
 		
 		this.addWindowListener(new WindowAdapter() {
 

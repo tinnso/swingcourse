@@ -4,6 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * 
+ * DB Management class, current just supply return connection
+ * in fact, you can modify it for more functions
+ *
+ */
 public class DBManager {
 
 	private static boolean _initialized=false;
@@ -39,7 +45,7 @@ public class DBManager {
         
         //遍历查询结果集
         try {
-        	
+        	// if not set timezone, when save date, it will -9 hours
         	//_url = "jdbc:mysql://localhost:3306/diary?user=root&password=123456&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
         	_url = "jdbc:mysql://localhost:3306/diary?user=root&password=123456&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false";
 			con = DriverManager.getConnection(_url);
@@ -51,8 +57,7 @@ public class DBManager {
 			}
 			
 		} catch (SQLException e) {
-	
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 			return null;
 		}

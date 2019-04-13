@@ -1,4 +1,4 @@
-package com.diaryclient.main;
+package com.diaryclient.diarymgr;
 
 
 import java.awt.BasicStroke;
@@ -26,7 +26,6 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -35,13 +34,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-import com.diary.comm.ICallback;
+import com.diaryclient.comm.ICallback;
 
 /**
- * @author Ares
- * @Describe(Date Chooser class)
+ * a class to pick date 
+ * 
  */
-public class DayChooser extends JPanel{
+public class DayPicker extends JPanel{
 
     private static final long serialVersionUID = -5384012731547358720L;
     
@@ -71,7 +70,7 @@ public class DayChooser extends JPanel{
        this.callback= callback;
     }
 
-    private DayChooser(java.util.Date date, String format, int startDAY){
+    private DayPicker(java.util.Date date, String format, int startDAY){
         if(startDAY > -1 && startDAY < 7) defaultStartDAY = startDAY;
         int dayIndex = defaultStartDAY;
         for(int i=0; i<7; i++){
@@ -85,17 +84,17 @@ public class DayChooser extends JPanel{
         initCalendarPanel();
     }
     
-    public static DayChooser getInstance(java.util.Date date, String format){
-        return new DayChooser(date, format, defaultStartDAY);
+    public static DayPicker getInstance(java.util.Date date, String format){
+        return new DayPicker(date, format, defaultStartDAY);
     }
 
-    public static DayChooser getInstance(java.util.Date date){
+    public static DayPicker getInstance(java.util.Date date){
         return getInstance(date, DEFAULTFORMAT);
     }
-    public static DayChooser getInstance(String format){
+    public static DayPicker getInstance(String format){
         return getInstance(new java.util.Date(), format);
     }
-    public static DayChooser getInstance(){
+    public static DayPicker getInstance(){
         return getInstance(new java.util.Date(), DEFAULTFORMAT);
     }
     
@@ -494,7 +493,7 @@ public class DayChooser extends JPanel{
         private List<DayLabel> list;
         
         public LabelManager(){
-            list = new ArrayList<DayChooser.DayLabel>();
+            list = new ArrayList<DayPicker.DayLabel>();
         }
         
         public List<DayLabel> getLabels(){
@@ -537,11 +536,7 @@ public class DayChooser extends JPanel{
         }
     }
     
-    
-    /**
-     * @param args
-     */
-    
+    // for test uses
     /*
     public static void main(String[] args) {
         JFrame jf = new JFrame("Date Picker Test");

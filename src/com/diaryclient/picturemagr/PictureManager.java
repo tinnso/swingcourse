@@ -1,4 +1,4 @@
-package com.diary.picturemagr;
+package com.diaryclient.picturemagr;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,13 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import com.diaryclient.datamgr.DBManager;
-import com.diaryclient.datamgr.StaticDataManager;
 
 public class PictureManager {
 	
@@ -52,7 +49,6 @@ public class PictureManager {
 	
     
     public static void readImage2DB(String path, int diaryid) {
-        //String path = "D:/1.png";
         Connection conn = null;
         PreparedStatement ps = null;
         FileInputStream in = null;
@@ -73,15 +69,9 @@ public class PictureManager {
                 System.out.println("≤Â»Î ß∞‹£°");
             }
             
-            // TODO
+            ps.close();
             conn.close();
-            if (null != ps) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+           
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,15 +100,8 @@ public class PictureManager {
                 readBin2Image(in, targetPath + rs.getString("name"));
             }
             
-            // TODO
+            ps.close();
             conn.close();
-            if (null != ps) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             
         } catch (Exception e) {
             e.printStackTrace();

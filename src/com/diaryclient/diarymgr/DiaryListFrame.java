@@ -1,8 +1,5 @@
 package com.diaryclient.diarymgr;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -13,7 +10,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,44 +21,30 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.diary.comm.DiaryUtil;
-import com.diary.picturemagr.PictureManager;
+import com.diaryclient.comm.DiaryUtil;
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
-import com.diaryclient.main.DiaryEditorFrame;
-import com.diaryclient.usermgr.UserEditFrame;
+import com.diaryclient.picturemagr.PictureManager;
 
-public class DiaryManagementFrame extends JFrame {
+/**
+ * 
+ * call for show diary list
+ *
+ */
+public class DiaryListFrame extends JFrame {
 	
+	private static final long serialVersionUID = -3396587782705289916L;
 	private JTable _datatable;
 	private DiaryTableModel _datamodel;
 	private JButton btnallselect;
 	private JButton btnmodify;
 	private JButton btndelete;
-	
-	
-
-	public static void main(String[] args) {
-
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DiaryManagementFrame frame = new DiaryManagementFrame();
-
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JButton btnexport;
 	
 	public void initilization(int uid) {
 		String sql = "";
@@ -102,17 +84,9 @@ public class DiaryManagementFrame extends JFrame {
 				
 			}
 			
-			
-			// TODO
+			ps.close();
 			conn.close();
-			if (null != ps) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -199,7 +173,6 @@ public class DiaryManagementFrame extends JFrame {
 						
 
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					
@@ -207,7 +180,6 @@ public class DiaryManagementFrame extends JFrame {
 				}
 			}
 
-			
 			
 			ps.close();
 			conn.close();
@@ -227,7 +199,6 @@ public class DiaryManagementFrame extends JFrame {
 		Document doc = Jsoup.parse(text);
 		Elements links = doc.select("img[src]");
 
-		String key = "";
 		for (Element element : links) {
 			String imgUrl = element.attr("src");
 			String filename = imgUrl.substring(imgUrl.lastIndexOf("\\")+1);  
@@ -247,7 +218,7 @@ public class DiaryManagementFrame extends JFrame {
 		return result;
 	}
 	
-	public DiaryManagementFrame() {
+	public DiaryListFrame() {
 		this.setSize(600, 400);// 设窗体的大小 宽和高
 		this.setLayout(null);
 
@@ -317,15 +288,20 @@ public class DiaryManagementFrame extends JFrame {
 				}
 				
 				if (checkedcount > 1) {
-					JOptionPane.showMessageDialog(DiaryManagementFrame.this, "You can only selected one Diary!");
+					JOptionPane.showMessageDialog(DiaryListFrame.this, "You can only selected one Diary!");
 					return;
 				} else if (checkedcount == 0) {
-					JOptionPane.showMessageDialog(DiaryManagementFrame.this, "Please select one Diary!");
+					JOptionPane.showMessageDialog(DiaryListFrame.this, "Please select one Diary!");
 					return;
 				}
 				
-				DiaryEditorFrame frame = new DiaryEditorFrame(date);
-				StaticDataManager.push(DiaryManagementFrame.this);
+				DiaryEditFrame frame = new DiaryEditFrame(date);
+				frame.setVisible(true);
+				StaticDataManager.push(DiaryListFrame.this);
+
+				// acquire date from DB again
+				int id = StaticDataManager.getUID();
+				initilization(id);
 			}
 			
 		});
@@ -350,7 +326,7 @@ public class DiaryManagementFrame extends JFrame {
 				}
 				
 				if (diaryids.size() == 0) {
-					JOptionPane.showMessageDialog(DiaryManagementFrame.this, "Please select one Diary!");
+					JOptionPane.showMessageDialog(DiaryListFrame.this, "Please select one Diary!");
 				} else {
 					delete(diaryids);
 					
@@ -362,7 +338,7 @@ public class DiaryManagementFrame extends JFrame {
 		});
 		this.add(btndelete);
 	
-		JButton btnexport = new JButton("导出");
+		btnexport = new JButton("导出");
 		btnexport.setBounds(370, 310, 100, 20);
 		btnexport.addActionListener(new ActionListener() {
 			@Override
@@ -380,27 +356,26 @@ public class DiaryManagementFrame extends JFrame {
 				}
 				
 				if (diaryids.size() == 0) {
-					JOptionPane.showMessageDialog(DiaryManagementFrame.this, "Please select one Diary!");
+					JOptionPane.showMessageDialog(DiaryListFrame.this, "Please select one Diary!");
 				} else {
 					
 					JFileChooser chooser = new JFileChooser();
 					chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					chooser.setMultiSelectionEnabled(false);
-					if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(DiaryManagementFrame.this)) {
+					if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(DiaryListFrame.this)) {
 						
 						try {
 							String targetfolder = chooser.getSelectedFile().getCanonicalPath() + "/";
 							
 							File file = new File(targetfolder);
 							if (file.listFiles().length >0 ) {
-								JOptionPane.showMessageDialog(DiaryManagementFrame.this, "Please chose empty folder!");
+								JOptionPane.showMessageDialog(DiaryListFrame.this, "Please chose empty folder!");
 								return;
 							} else {
 								export(diaryids, targetfolder);
 							}
 							
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}
@@ -416,7 +391,7 @@ public class DiaryManagementFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				DiaryManagementFrame.this.dispose();
+				DiaryListFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 		});
@@ -433,11 +408,7 @@ public class DiaryManagementFrame extends JFrame {
 		
 		
 		int id = StaticDataManager.getUID();
-		initilization(id);// TODO
-		//initilization(-1);// TODO
-		
-		
-		this.setVisible(true);
+		initilization(id);
 
 	}
 

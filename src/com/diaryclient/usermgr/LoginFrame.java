@@ -1,11 +1,9 @@
 package com.diaryclient.usermgr;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,8 +21,11 @@ import java.sql.*;
 
 public class LoginFrame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbedPane;
-	private int count = 0;
 
 	public LoginFrame() {
 		tabbedPane = new JTabbedPane();
@@ -63,7 +64,8 @@ public class LoginFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StaticDataManager.push(LoginFrame.this);
-				UserEditFrame profile = new UserEditFrame(false);
+				UserEditFrame profile = new UserEditFrame(false, -1);
+				profile.setVisible(true);
 			}
 
 		});
@@ -94,7 +96,7 @@ public class LoginFrame extends JFrame {
 					Connection conn = DBManager.getconn();
 					java.sql.Statement statement = conn.createStatement();
 					
-					String sql = String.format("select id, account from duser where account='%s' and password='%s' and type=1",user, pass);
+					String sql = String.format("select id, account from duser where account='%s' and password='%s' and type=1 and deleted=0",user, pass);
 					
 					ResultSet rs = statement.executeQuery(sql);
 					int count = 0;
@@ -192,7 +194,7 @@ public class LoginFrame extends JFrame {
 					Connection conn = DBManager.getconn();
 					java.sql.Statement statement = conn.createStatement();
 					
-					String sql = String.format("select id, account from duser where account='%s' and password='%s' and type=0",user, pass);
+					String sql = String.format("select id, account from duser where account='%s' and password='%s' and type=0 and deleted=0",user, pass);
 					
 					ResultSet rs = statement.executeQuery(sql);
 					int count = 0;
@@ -210,11 +212,9 @@ public class LoginFrame extends JFrame {
 						return;
 					} else {
 						StaticDataManager.setUserInfo(user, userid);
-						// TODO
 					}
 					
 					conn.close();
-									
 					
 				} catch (SQLException e1) {
 					System.out.println("sql error happend!!!");
@@ -244,9 +244,6 @@ public class LoginFrame extends JFrame {
 
 		// 居中显示
 		this.setLocationRelativeTo(null);
-
-		// 窗体可见
-		// this.setVisible(true);
 
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}

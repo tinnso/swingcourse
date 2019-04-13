@@ -1,15 +1,17 @@
 package com.diaryclient.diarymgr;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JCheckBox;
 import javax.swing.table.AbstractTableModel;
 
 public class DiaryTableModel extends AbstractTableModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String[] columnNames = {"选择", "日记日期","记录日期","更新日期"};
 	public List<Boolean> checks;
 	public List<Date> dates;
@@ -22,13 +24,11 @@ public class DiaryTableModel extends AbstractTableModel {
 	
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
 		return dates.size();
 	}
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
 		return columnNames.length;
 	}
 
@@ -80,7 +80,7 @@ public class DiaryTableModel extends AbstractTableModel {
 	}
 	
 	@Override
-	public Class getColumnClass(int columnIndex) {
+	public Class<?> getColumnClass(int columnIndex) {
 		switch (columnIndex) {
 		case 0:
 			return Boolean.class;
@@ -95,7 +95,7 @@ public class DiaryTableModel extends AbstractTableModel {
 			return String.class;
 
 		default:
-				return String.class;
+			return String.class;
 		
 		}
 	}

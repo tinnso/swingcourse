@@ -7,15 +7,19 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.WindowConstants;
-
 import com.diaryclient.datamgr.StaticDataManager;
-import com.diaryclient.diarymgr.DiaryManagementFrame;
+import com.diaryclient.diarymgr.DiaryEditFrame;
+import com.diaryclient.diarymgr.DiaryListFrame;
 import com.diaryclient.usermgr.UserEditFrame;
 
 public class MainMenuFrame extends JFrame {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public MainMenuFrame() {
 		
 		
@@ -38,7 +42,8 @@ public class MainMenuFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StaticDataManager.push(MainMenuFrame.this);
-				UserEditFrame profile = new UserEditFrame(true);
+				UserEditFrame profile = new UserEditFrame(true, StaticDataManager.getUID());
+				profile.setVisible(true);
 			}
 			
 		});
@@ -52,7 +57,8 @@ public class MainMenuFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StaticDataManager.push(MainMenuFrame.this);
-				DiaryEditorFrame diary = new DiaryEditorFrame(null);
+				DiaryEditFrame diary = new DiaryEditFrame(null);
+				diary.setVisible(true);
 			}
 			
 		});
@@ -66,7 +72,8 @@ public class MainMenuFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StaticDataManager.push(MainMenuFrame.this);
-				DiaryManagementFrame diary = new DiaryManagementFrame();
+				DiaryListFrame diary = new DiaryListFrame();
+				diary.setVisible(true);
 			}
 			
 		});

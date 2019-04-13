@@ -1,4 +1,4 @@
-package com.diaryclient.main;
+package com.diaryclient.diarymgr;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -18,11 +18,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -30,13 +27,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-import com.diary.comm.ICallback;
+import com.diaryclient.comm.ICallback;
 
 
 
@@ -222,13 +218,6 @@ private static final long serialVersionUID = -5384012731547358721L;
         }
     }
     
-    //refresh all panel
-    private void refresh() {
-        bodyPanel.updateDate();
-        SwingUtilities.updateComponentTreeUI(this);
-    }
-    
-        
     private class IconLabel extends JLabel implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener {
 
         private static final long serialVersionUID = -6002103678554799020L;
@@ -324,9 +313,6 @@ private static final long serialVersionUID = -5384012731547358721L;
             list = new ArrayList<IconLabel>();
         }
         
-        public List<IconLabel> getLabels(){
-            return list;
-        }
         public void addLabel(IconLabel label){
             list.add(label);
         }

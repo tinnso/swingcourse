@@ -15,14 +15,25 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.diaryclient.comm.ICallback;
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
-import com.diaryclient.main.MainMenuFrame;
-import com.mysql.cj.xdevapi.Statement;
 
 public class UserEditFrame extends JFrame {
+	
 
-	public UserEditFrame(boolean ismodify) {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private ICallback callback;
+
+    public void setCallback(ICallback callback)
+    {
+       this.callback= callback;
+    }
+
+	public UserEditFrame(boolean ismodify, int userid) {
 		this.setBounds(0, 0, 350, 400);
 		this.setLayout(null);
 
@@ -31,9 +42,6 @@ public class UserEditFrame extends JFrame {
 
 		// 居中显示
 		this.setLocationRelativeTo(null);
-
-		// 窗体可见
-		this.setVisible(true);
 
 		this.addWindowListener(new WindowAdapter() {
 
@@ -138,6 +146,8 @@ public class UserEditFrame extends JFrame {
 						
 						rs.close();
 						
+						// TODO basically password should be encrypted then save to DB!!!
+						
 						if (count != 0) {
 							JOptionPane.showMessageDialog(UserEditFrame.this, "Account name has been used.");
 							return;
@@ -162,6 +172,10 @@ public class UserEditFrame extends JFrame {
 					conn.close();
 					
 					JOptionPane.showMessageDialog(UserEditFrame.this, "Account update success.");
+					
+					if (callback != null) {
+						callback.callback(null);
+					}
 					
 					UserEditFrame.this.dispose();
 					StaticDataManager.pop();
@@ -225,7 +239,6 @@ public class UserEditFrame extends JFrame {
 				txtname.setText(name);
 				
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
