@@ -187,7 +187,7 @@ public class UserListFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				StaticDataManager.push(UserListFrame.this);
-				UserEditFrame frame = new UserEditFrame(false, -1);
+				UserEditFrame frame = new UserEditFrame(-1);
 				frame.setVisible(true);
 				frame.setCallback(new ICallback() {
 
@@ -232,7 +232,10 @@ public class UserListFrame extends JFrame {
 				}
 				
 				StaticDataManager.push(UserListFrame.this);
-				UserEditFrame frame = new UserEditFrame(true, userid);
+				
+				System.out.println("userid before modify" + userid);
+				
+				UserEditFrame frame = new UserEditFrame(userid);
 				frame.setVisible(true);
 				
 				frame.setCallback(new ICallback() {

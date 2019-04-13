@@ -42,7 +42,7 @@ public class MainMenuFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StaticDataManager.push(MainMenuFrame.this);
-				UserEditFrame profile = new UserEditFrame(true, StaticDataManager.getUID());
+				UserEditFrame profile = new UserEditFrame(StaticDataManager.getUID());
 				profile.setVisible(true);
 			}
 			

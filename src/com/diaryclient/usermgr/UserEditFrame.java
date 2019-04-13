@@ -27,15 +27,20 @@ public class UserEditFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private ICallback callback;
+	
+	private int _userid = -1;
+
 
     public void setCallback(ICallback callback)
     {
        this.callback= callback;
     }
 
-	public UserEditFrame(boolean ismodify, int userid) {
+	public UserEditFrame(int userid) {
 		this.setBounds(0, 0, 350, 400);
 		this.setLayout(null);
+	
+		_userid = userid;
 
 		// 窗体大小不能改变
 		this.setResizable(false);
@@ -74,7 +79,7 @@ public class UserEditFrame extends JFrame {
 		txtaccount.setBounds(70, 70, 150, 20);
         this.add(txtaccount);
         
-        if(ismodify)
+        if(_userid != -1)
         	txtaccount.setEnabled(false);
         
         // 密码输入框旁边的文字
@@ -100,7 +105,7 @@ public class UserEditFrame extends JFrame {
         // 按钮设定
         
         String text = "登陆";
-        if (ismodify) text = "修改";
+        if (_userid != -1) text = "修改";
         JButton bu3 = new JButton(text);
         bu3.setBounds(100, 250, 65, 20);
         
@@ -132,7 +137,7 @@ public class UserEditFrame extends JFrame {
 					Connection conn = DBManager.getconn();
 					java.sql.Statement statement = conn.createStatement();
 					
-					if (!ismodify){ // when for new account
+					if (_userid == -1){ // when for new account
 					
 						String sql = String.format("select count(*) from duser where account= '%s'",user);
 						
@@ -157,11 +162,24 @@ public class UserEditFrame extends JFrame {
 							if (statement.execute(sql)) {
 								System.out.println("Account Insert Failed");
 							}
+							
+							
+							// SELECT LAST_INSERT_ID();
+							sql = "SELECT LAST_INSERT_ID() as id";
+							rs = statement.executeQuery(sql);
+
+							while (rs.next()) {
+								_userid = rs.getInt("id");
+							}
+							
+							
 							statement.close();
+							bu3.setText("修改");
+							txtaccount.setEnabled(false);
 						}
 					} else { // modify account
-						String sql = String.format("update duser set name = '%s', password = '%s', updatedate=sysdate(), insertdate=sysdate() where id = '%d'", 
-								name,pass, StaticDataManager.getUID());
+						String sql = String.format("update duser set name = '%s', password = '%s', updatedate=sysdate(), insertdate=sysdate(), deleted=0 where id = '%d'", 
+								name,pass, _userid);
 						
 						if (statement.execute(sql)) {
 							System.out.println("Account Insert Failed");
@@ -209,7 +227,7 @@ public class UserEditFrame extends JFrame {
 		});
         
         
-		if (ismodify) {
+		if (_userid != -1) {
 			Connection conn = DBManager.getconn();
 			java.sql.Statement statement;
 			try {
@@ -217,7 +235,7 @@ public class UserEditFrame extends JFrame {
 
 
 				String sql = String.format("select account, password, name from duser where id= '%d'",
-						StaticDataManager.getUID());
+						_userid);
 
 				ResultSet rs = statement.executeQuery(sql);
 

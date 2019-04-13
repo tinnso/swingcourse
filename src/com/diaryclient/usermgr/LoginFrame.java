@@ -64,7 +64,7 @@ public class LoginFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StaticDataManager.push(LoginFrame.this);
-				UserEditFrame profile = new UserEditFrame(false, -1);
+				UserEditFrame profile = new UserEditFrame(-1);
 				profile.setVisible(true);
 			}
 
