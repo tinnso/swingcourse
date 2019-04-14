@@ -235,7 +235,7 @@ public class DiaryEditFrame extends JFrame {
 		try {
 			conn = DBManager.getconn();
 
-			String sql = "update diary date=?, text=?, updatedate=sysdate() where id=?";
+			String sql = "update diary set date=?, text=?, updatedate=sysdate() where id=?";
 			ps = conn.prepareStatement(sql);
 			ps.setDate(1, new java.sql.Date(date.getTime()));
 			ps.setString(2, text);
