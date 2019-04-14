@@ -216,6 +216,7 @@ public class ReminderEditFrame extends JFrame {
 				
 				if("".equals(text)) {
 					JOptionPane.showMessageDialog(ReminderEditFrame.this, "You must input the content!");
+					btnsave.setEnabled(true);
 					return;
 				}
 				

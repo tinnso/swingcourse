@@ -16,7 +16,6 @@ import javax.swing.JTextField;
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
 import com.diaryclient.main.MainMenuFrame;
-
 import java.sql.*;
 
 public class LoginFrame extends JFrame {
@@ -27,6 +26,8 @@ public class LoginFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbedPane;
 
+	//private ReminderService reminderservice;
+	
 	public LoginFrame() {
 		tabbedPane = new JTabbedPane();
 
@@ -117,6 +118,8 @@ public class LoginFrame extends JFrame {
 						StaticDataManager.setUserInfo(user, userid);
 						MainMenuFrame menu = new MainMenuFrame();
 						StaticDataManager.push(menu);
+						//reminderservice = new ReminderService();
+						//reminderservice.start();
 					}
 					
 					conn.close();
@@ -231,7 +234,8 @@ public class LoginFrame extends JFrame {
 
 
 		});
-
+		
+		
 		tabbedPane.addTab("Admin Login", adminpanel);
 
 		add(tabbedPane);

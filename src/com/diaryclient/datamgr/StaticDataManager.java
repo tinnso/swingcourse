@@ -4,8 +4,12 @@ import java.awt.Component;
 import java.awt.Window;
 import java.util.Stack;
 
+import com.diaryclient.remindermgr.ReminderService;
+
 public  class StaticDataManager {
 
+	private static ReminderService  serivce = new ReminderService();
+	
 	/**
 	 * place for record pages that are be passed or current showed
 	 * you can move back to those pages step by step like a stack
@@ -13,6 +17,8 @@ public  class StaticDataManager {
 	public static Stack<Window> st = new Stack<Window>();
 	
 	public static void pop() {
+		
+		serivce.stop();
 		if (!st.isEmpty()) {
 			Window com = st.pop();
 			com.dispose();
@@ -22,6 +28,8 @@ public  class StaticDataManager {
 			Window current = st.peek();
 			current.setVisible(true);
 		} 	
+		
+		serivce.start();
 	} 
 	
 	/**
@@ -29,7 +37,7 @@ public  class StaticDataManager {
 	 * 
 	 */
 	public static void push(Window com) {
-		
+			serivce.stop();
 			if (!st.isEmpty()) {
 				Window current = st.peek();
 				current.setVisible(false);
@@ -37,7 +45,18 @@ public  class StaticDataManager {
 			com.setVisible(true);
 			st.push(com);
 			
+			serivce.start();
+			
 	} 
+	
+	public static Window getcurrentwin() {
+		if (!st.isEmpty()) {
+			Window current = st.peek();
+			return current;
+		} 	else {
+			return null;
+		}
+	}
 	
 	/**
 	 * 
