@@ -27,6 +27,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.diaryclient.comm.DiaryUtil;
+import com.diaryclient.comm.ICallback;
 import com.diaryclient.datamgr.DBManager;
 import com.diaryclient.datamgr.StaticDataManager;
 import com.diaryclient.picturemagr.PictureManager;
@@ -296,12 +297,21 @@ public class DiaryListFrame extends JFrame {
 				}
 				
 				DiaryEditFrame frame = new DiaryEditFrame(date);
-				frame.setVisible(true);
-				StaticDataManager.push(DiaryListFrame.this);
+				StaticDataManager.push(frame);
+				
+				frame.setCallback(new ICallback() {
 
+					@Override
+					public void callback(String args) {
+						int id = StaticDataManager.getUID();
+						initilization(id);
+					}
+					
+				});
+				
 				// acquire date from DB again
-				int id = StaticDataManager.getUID();
-				initilization(id);
+				//int id = StaticDataManager.getUID();
+				//initilization(id);
 			}
 			
 		});
@@ -390,8 +400,6 @@ public class DiaryListFrame extends JFrame {
 		btnreturn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				DiaryListFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 		});
@@ -400,8 +408,6 @@ public class DiaryListFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-			
 				StaticDataManager.pop();
 			}
 		});

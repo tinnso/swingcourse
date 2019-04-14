@@ -42,9 +42,8 @@ public class MainMenuFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StaticDataManager.push(MainMenuFrame.this);
 				UserEditFrame profile = new UserEditFrame(StaticDataManager.getUID());
-				profile.setVisible(true);
+				StaticDataManager.push(profile);
 			}
 			
 		});
@@ -57,9 +56,9 @@ public class MainMenuFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StaticDataManager.push(MainMenuFrame.this);
+				
 				DiaryEditFrame diary = new DiaryEditFrame(null);
-				diary.setVisible(true);
+				StaticDataManager.push(diary);
 			}
 			
 		});
@@ -72,9 +71,8 @@ public class MainMenuFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StaticDataManager.push(MainMenuFrame.this);
 				DiaryListFrame diary = new DiaryListFrame();
-				diary.setVisible(true);
+				StaticDataManager.push(diary);
 			}
 			
 		});
@@ -87,9 +85,9 @@ public class MainMenuFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StaticDataManager.push(MainMenuFrame.this);
 				ReminderListFrame frame = new ReminderListFrame();
-				frame.setVisible(true);
+				
+				StaticDataManager.push(frame);
 			}
 			
 		});
@@ -103,8 +101,6 @@ public class MainMenuFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				MainMenuFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 		});
@@ -113,8 +109,6 @@ public class MainMenuFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-			
 				StaticDataManager.pop();
 			}
 		});

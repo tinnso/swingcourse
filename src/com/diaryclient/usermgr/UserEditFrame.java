@@ -51,8 +51,7 @@ public class UserEditFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-			
+				
 				StaticDataManager.pop();
 			}
 		});
@@ -195,7 +194,6 @@ public class UserEditFrame extends JFrame {
 						callback.callback(null);
 					}
 					
-					UserEditFrame.this.dispose();
 					StaticDataManager.pop();
 					
 				} catch (SQLException e1) {
@@ -221,7 +219,6 @@ public class UserEditFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				UserEditFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 		});

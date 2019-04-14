@@ -175,9 +175,9 @@ public class ReminderListFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				StaticDataManager.push(ReminderListFrame.this);
 				ReminderEditFrame frame = new ReminderEditFrame(-1);
-				frame.setVisible(true);
+				StaticDataManager.push(frame);
+				
 				frame.setCallback(new ICallback() {
 
 					@Override
@@ -220,11 +220,10 @@ public class ReminderListFrame extends JFrame {
 					return;
 				}
 				
-				StaticDataManager.push(ReminderListFrame.this);
-				
 				ReminderEditFrame frame = new ReminderEditFrame(reminderid);
-				frame.setVisible(true);
+				StaticDataManager.push(frame);
 				
+
 				frame.setCallback(new ICallback() {
 					@Override
 					public void callback(String args) {
@@ -275,8 +274,6 @@ public class ReminderListFrame extends JFrame {
 		btnreturn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				ReminderListFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 		});
@@ -285,7 +282,6 @@ public class ReminderListFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
 			
 				StaticDataManager.pop();
 			}

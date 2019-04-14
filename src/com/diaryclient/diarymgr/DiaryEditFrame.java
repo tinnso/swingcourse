@@ -49,6 +49,14 @@ public class DiaryEditFrame extends JFrame {
 
 	private static final int WINDOW_WIDTH = 700;
 	
+	private ICallback callback;
+	
+	public void setCallback(ICallback callback)
+    {
+       this.callback= callback;
+    }
+
+	
 	private int _diaryid = -1;
 	private String _date = null;
 	private int _indexcount = 0;
@@ -630,8 +638,9 @@ public class DiaryEditFrame extends JFrame {
 		btnreturn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				DiaryEditFrame.this.dispose();
+				
+				if ( callback != null)				
+					callback.callback(null);
 				StaticDataManager.pop();
 			}
 		});
@@ -678,8 +687,6 @@ public class DiaryEditFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-			
 				StaticDataManager.pop();
 			}
 		});

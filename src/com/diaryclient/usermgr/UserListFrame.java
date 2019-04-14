@@ -186,9 +186,10 @@ public class UserListFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				StaticDataManager.push(UserListFrame.this);
+				
 				UserEditFrame frame = new UserEditFrame(-1);
-				frame.setVisible(true);
+				StaticDataManager.push(frame);
+				
 				frame.setCallback(new ICallback() {
 
 					@Override
@@ -231,12 +232,12 @@ public class UserListFrame extends JFrame {
 					return;
 				}
 				
-				StaticDataManager.push(UserListFrame.this);
+				
 				
 				System.out.println("userid before modify" + userid);
 				
 				UserEditFrame frame = new UserEditFrame(userid);
-				frame.setVisible(true);
+				StaticDataManager.push(frame);
 				
 				frame.setCallback(new ICallback() {
 					@Override
@@ -289,7 +290,6 @@ public class UserListFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				UserListFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 		});
@@ -298,7 +298,6 @@ public class UserListFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
 			
 				StaticDataManager.pop();
 			}

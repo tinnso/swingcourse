@@ -227,7 +227,6 @@ public class ReminderEditFrame extends JFrame {
 					callback.callback(null);
 				}
 				
-				ReminderEditFrame.this.dispose();
 				StaticDataManager.pop();
 			}
 	    });
@@ -241,8 +240,7 @@ public class ReminderEditFrame extends JFrame {
 	    this.addWindowListener(new WindowAdapter() {
 
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-			
+
 				StaticDataManager.pop();
 			}
 		});

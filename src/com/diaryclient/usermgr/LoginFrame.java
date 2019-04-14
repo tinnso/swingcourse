@@ -63,9 +63,8 @@ public class LoginFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StaticDataManager.push(LoginFrame.this);
 				UserEditFrame profile = new UserEditFrame(-1);
-				profile.setVisible(true);
+				StaticDataManager.push(profile);
 			}
 
 		});
@@ -117,9 +116,7 @@ public class LoginFrame extends JFrame {
 	
 						StaticDataManager.setUserInfo(user, userid);
 						MainMenuFrame menu = new MainMenuFrame();
-						StaticDataManager.push(LoginFrame.this);
-						menu.setVisible(true);
-					
+						StaticDataManager.push(menu);
 					}
 					
 					conn.close();
@@ -214,8 +211,7 @@ public class LoginFrame extends JFrame {
 						StaticDataManager.setUserInfo(user, userid);
 						
 						UserListFrame frame = new  UserListFrame();
-						StaticDataManager.push(LoginFrame.this);
-						frame.setVisible(true);
+						StaticDataManager.push(frame);
 					}
 					
 					conn.close();
@@ -255,7 +251,7 @@ public class LoginFrame extends JFrame {
 	public static void main(String[] args) {
 		// 实例化对象
 		LoginFrame login = new LoginFrame();
-		login.setVisible(true);
+		StaticDataManager.push(login);
 
 	}
 }
