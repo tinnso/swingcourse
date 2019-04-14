@@ -1,6 +1,5 @@
 package com.diaryclient.datamgr;
 
-import java.awt.Component;
 import java.awt.Window;
 import java.util.Stack;
 
