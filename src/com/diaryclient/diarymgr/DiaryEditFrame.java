@@ -71,6 +71,56 @@ public class DiaryEditFrame extends JFrame {
 	JButton btnmodify = new JButton("ÐÞ¸Ä");
 	JButton btndelete = new JButton("É¾³ý");
 
+	// clear the system folder of current diary, rewrite the URL related to it
+	private String rewriteurl(String text, String Date) 
+	{
+		System.out.println("Html document before rewrite URL:" + text);
+		
+		String picturepath = getpicturepath(Date);
+		File file = new File(picturepath);
+		for (File subfile : file.listFiles()) {
+			if (subfile.isFile())
+				subfile.delete();
+			
+			// forgive about the folder
+		}
+		
+		String iconpath = "";
+		try {
+			iconpath = new File(this.getClass().getResource("/").getFile(), "../resource/icons/")
+					.getCanonicalPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	
+		Document doc = Jsoup.parse(text);
+		Elements links = doc.select("img[src]");
+	
+		for (Element element : links) {
+			String imgUrl = element.attr("src");
+			String filepath = "";
+			
+			String filename = imgUrl.substring(imgUrl.lastIndexOf("\\")+1);  
+			if (imgUrl.contains("diary")) { // pictures
+				filepath = picturepath;
+			
+			} else if (imgUrl.contains("icons")) { // icons
+				filepath = iconpath;
+				
+				
+			}
+			String url = String.format("file:///%s\\%s", filepath, filename);
+			
+			element.attr("src", url);
+		}
+	
+		String result = doc.body().html(); 
+		System.out.println("Html document after rewrite URL:" + result);
+		
+		return result;
+		
+	}
+	
 	private String zipurl(String text)
 	{
 		System.out.println("Html document before zip:" + text);
@@ -341,6 +391,9 @@ public class DiaryEditFrame extends JFrame {
 			}
 
 			if (diaryid != -1) {
+				
+				text = rewriteurl(text, strDate);
+				
 				_diaryid = diaryid;
 				mainTextArea.setText(zipurl(text));
 				mainTextPane.setText(text);
