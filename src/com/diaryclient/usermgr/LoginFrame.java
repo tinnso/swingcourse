@@ -109,6 +109,7 @@ public class LoginFrame extends JFrame {
 					}
 					
 					rs.close();
+					conn.close();
 					
 					if (count == 0) {
 						JOptionPane.showMessageDialog(LoginFrame.this, "Account or Password not correct");
@@ -122,8 +123,6 @@ public class LoginFrame extends JFrame {
 						//reminderservice.start();
 					}
 					
-					conn.close();
-									
 					
 				} catch (SQLException e1) {
 					System.out.println("sql error happend!!!");
